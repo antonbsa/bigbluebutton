@@ -198,6 +198,10 @@ exports.joinMeetingDemoPage = 'div[class^="join-meeting"]';
 exports.askModerator = 'button[data-test="askModerator"]';
 exports.alwaysAccept = 'button[data-test="alwaysAccept"]';
 exports.alwaysDeny = 'button[data-test="alwaysDeny"]';
+// Lock Viewers
+exports.lockViewersButton = 'li[data-test="lockViewersButton"]';
+exports.applyLockSettings ='button[data-test="applyLockSettings"]';
+exports.lockShareWebcam = 'input[data-test="lockShareWebcam"]';
 
 // Locales
 exports.locales = ['af', 'ar', 'az', 'bg-BG', 'bn', 'ca', 'cs-CZ', 'da', 'de',

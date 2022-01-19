@@ -1,6 +1,7 @@
 const { test, devices } = require('@playwright/test');
 const { Status } = require('./status');
 const { MultiUsers } = require('./multiusers');
+const { LockViewers } = require('./lockViewers');
 const motoG4 = devices['Moto G4'];
 const iPhone11 = devices['iPhone 11'];
 
@@ -111,4 +112,42 @@ test.describe.parallel('User test suite', () => {
     await multiusers.initUserPage(true, motoContext);
     await multiusers.chatPanelNotAppearOnMobile();
   });
+
+  test.describe.parallel('Lock viewers', () => {
+    test('Share webcam', async ({ browser, context, page }) => {
+      const lockViewers = new LockViewers(browser, context);
+      await lockViewers.initPages(page);
+      await lockViewers.lockShareWebcam();
+    });
+
+    test('See other viewers webcams', async ({ browser, context, page }) => {
+      const lockViewers = new LockViewers(browser, context);
+      await lockViewers.initPages(page);
+    });
+
+    test('Share microphone', async ({ browser, context, page }) => {
+      const lockViewers = new LockViewers(browser, context);
+      await lockViewers.initPages(page);
+    });
+
+    test('Send Public chat messages', async ({ browser, context, page }) => {
+      const lockViewers = new LockViewers(browser, context);
+      await lockViewers.initPages(page);
+    });
+
+    test('Send Private chat messages', async ({ browser, context, page }) => {
+      const lockViewers = new LockViewers(browser, context);
+      await lockViewers.initPages(page);
+    });
+
+    test('Edit Shared Notes', async ({ browser, context, page }) => {
+      const lockViewers = new LockViewers(browser, context);
+      await lockViewers.initPages(page);
+    });
+
+    test('See other viewers in the Users list', async ({ browser, context, page }) => {
+      const lockViewers = new LockViewers(browser, context);
+      await lockViewers.initPages(page);
+    });
+  })
 });

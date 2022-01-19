@@ -19,6 +19,13 @@ function checkNetworkStatus({ dataContainer, networdData }) {
   if (!check) return true;
 }
 
+function openLockViewers(test) {
+  await test.waitAndClick(e.manageUsers);
+  await test.waitAndClick(e.lockViewersButton);
+  // check if modal appears
+}
+
 exports.setStatus = setStatus;
 exports.connectionStatus = connectionStatus;
 exports.checkNetworkStatus = checkNetworkStatus;
+exports.openLockViewers = openLockViewers;

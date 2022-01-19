@@ -52,8 +52,8 @@ class MultiUsers {
   }
 
   async disableWebcamsFromConnectionStatus() {
-    await this.modPage.shareWebcam(true, ELEMENT_WAIT_LONGER_TIME);
-    await this.userPage.shareWebcam(true, ELEMENT_WAIT_LONGER_TIME);
+    await this.modPage.shareWebcam(ELEMENT_WAIT_LONGER_TIME);
+    await this.userPage.shareWebcam(ELEMENT_WAIT_LONGER_TIME);
     await connectionStatus(this.modPage);
     await this.modPage.waitAndClickElement(e.dataSavingWebcams);
     await this.modPage.waitAndClickElement(e.closeConnectionStatusModal);
@@ -65,11 +65,11 @@ class MultiUsers {
   }
 
   async usersConnectionStatus() {
-    await this.modPage.shareWebcam(true);
+    await this.modPage.shareWebcam();
     await this.initUserPage();
     await this.userPage.waitAndClick(e.joinAudio);
     await this.userPage.joinMicrophone();
-    await this.userPage.shareWebcam(true);
+    await this.userPage.shareWebcam();
     await this.userPage.waitAndClick(e.connectionStatusBtn);
 
     await this.userPage.page.waitForFunction(checkNetworkStatus,

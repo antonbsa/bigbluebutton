@@ -202,6 +202,7 @@ class LockViewersComponent extends Component {
                     ariaLabel={intl.formatMessage(intlMessages.webcamLabel)}
                     showToggleLabel={showToggleLabel}
                     invertColors={invertColors}
+                    data-test="lockShareWebcam"
                   />
                 </div>
               </div>
@@ -377,6 +378,7 @@ class LockViewersComponent extends Component {
                 updateWebcamsOnlyForModerator(usersProp.webcamsOnlyForModerator);
                 closeModal();
               }}
+              data-test="applyLockSettings"
             />
           </div>
         </div>
