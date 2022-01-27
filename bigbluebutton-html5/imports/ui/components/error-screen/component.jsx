@@ -69,6 +69,8 @@ class ErrorScreen extends PureComponent {
       children,
     } = this.props;
 
+    const dataTest = (code === 401) ? 'unauthorized' : 'errorScreenMessage';
+
     let formatedMessage = intl.formatMessage(intlMessages[defaultProps.code]);
 
     if (code in intlMessages) {
@@ -83,14 +85,15 @@ class ErrorScreen extends PureComponent {
 
     return (
       <div className={styles.background}>
-        <h1 className={styles.message} data-test="errorScreenMessage">
+        <h1 className={styles.message} data-test={dataTest}>
           {formatedMessage}
         </h1>
         {
           !errorMessageDescription || (
             <div className={styles.sessionMessage}>
               {errorMessageDescription}
-            </div>)
+            </div>
+          )
         }
         <div className={styles.separator} />
         <h1 className={styles.codeError}>
