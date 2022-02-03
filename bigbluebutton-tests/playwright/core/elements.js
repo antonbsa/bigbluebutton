@@ -56,6 +56,7 @@ exports.chatTitle = 'div[data-test="chatTitle"]';
 exports.startPrivateChat = 'li[data-test="startPrivateChat"]';
 exports.publicChat = 'div[data-test="publicChat"]';
 exports.privateChat = 'div[data-test="privateChat"]';
+exports.hidePublicChat = 'button[data-test="hidePublicChat"]';
 exports.hidePrivateChat = 'button[data-test="hidePrivateChat"]';
 exports.typingIndicator = 'span[data-test="typingIndicator"]';
 exports.chatUserMessageText = 'p[data-test="chatUserMessageText"]';
@@ -173,6 +174,10 @@ exports.ytFrameTitle = 'a[class^="ytp-title-link"]';
 exports.statingUploadPresentationToast = 'To be uploaded ...';
 exports.convertingPresentationFileToast = 'Converting file';
 exports.presentationUploadedToast = 'Current presentation';
+
+// Settings
+exports.messageTitle = 'h2[data-test="messageTitle"]';
+exports.notesTitle = 'h2[data-test="notesTitle"]';
 
 // User
 exports.userAvatar = 'div[data-test="userAvatar"]';
