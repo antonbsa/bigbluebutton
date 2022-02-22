@@ -54,7 +54,7 @@ class CustomParameters extends MultiUsers {
   }
 
   async customStyle() {
-    await this.modPage.waitForSelector(e.whiteboard, ELEMENT_WAIT_LONGER_TIME);
+    await this.modPage.waitForSelector(e.chatButton)
     const resp = await this.modPage.page.evaluate((elem) => {
       return document.querySelectorAll(elem)[0].offsetHeight == 0;
     }, e.presentationTitle);

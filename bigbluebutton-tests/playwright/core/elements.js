@@ -21,6 +21,7 @@ exports.userListButton = 'button[accesskey="U"]';
 
 // Audio
 exports.joinAudio = 'button[data-test="joinAudio"]';
+//! aqui
 exports.audioModal = 'div[data-test="audioModal"]';
 exports.listenOnlyButton = 'button[data-test="listenOnlyBtn"]';
 exports.connecting = 'span[data-test="connecting"]';
@@ -87,7 +88,7 @@ exports.userslist = 'div[data-test="userList"]';
 
 // Notes
 exports.sharedNotes = 'div[data-test="sharedNotes"]';
-exports.hideNoteLabel = 'button[data-test="hideNoteLabel"]';
+exports.hideNotesLabel = 'button[data-test="hideNotesLabel"]';
 exports.etherpadFrame = 'iframe[title="etherpad"]';
 exports.etherpadOuter = 'iframe[title="Ether"]';
 exports.etherpadInner = 'iframe[title="pad"]';
@@ -111,7 +112,7 @@ exports.endScreenshareToast = 'Screenshare has ended';
 exports.joiningMessageToast = 'You have joined the audio conference';
 exports.attendeeJoinedToast = 'Attendee joined the session';
 exports.raisingHandToast = 'You have raised your hand';
-exports.loweringHandToast = 'You have lowered your hand';
+exports.loweringHandToast = 'Your hand has been lowered';
 // Icons
 const baseBbbIcon = 'i.icon-bbb-';
 exports.unmuteIcon = `${baseBbbIcon}unmute`;
@@ -162,7 +163,7 @@ exports.toastDownload = 'a[data-test="toastDownload"]';
 exports.presentationDownloadBtn = 'button[data-test="presentationDownload"]';
 exports.removePresentation = 'button[data-test="removePresentation"]';
 exports.presentationPlaceholder = 'div[data-test="presentationPlaceholder"]';
-exports.presentationContainer = 'div[class^="presentationContainer--"]';
+exports.presentationContainer = 'div[data-test="presentationContainer"]';
 exports.minimizePresentation = 'button[data-test="minimizePresentation"]';
 exports.restorePresentation = 'button[data-test="restorePresentation"]';
 exports.shareExternalVideoBtn = 'li[data-test="shareExternalVideo"]';
