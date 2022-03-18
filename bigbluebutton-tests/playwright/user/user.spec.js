@@ -4,6 +4,7 @@ const { MultiUsers } = require('./multiusers');
 const { GuestPolicy } = require('./guestPolicy');
 const { LockViewers } = require('./lockViewers');
 const { MobileDevices } = require('./mobileDevices');
+const { getSettings } = require('../core/settings');
 const motoG4 = devices['Moto G4'];
 const iPhone11 = devices['iPhone 11'];
 

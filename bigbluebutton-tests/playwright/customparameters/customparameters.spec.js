@@ -155,7 +155,7 @@ test.describe.parallel('CustomParameters', () => {
       await customParam.skipVideoPreview();
     });
 
-    test('Skip Video Preview on First Join', async ({ browser, context, page }) => {
+    test.only('Skip Video Preview on First Join', async ({ browser, context, page }) => {
       const customParam = new CustomParameters(browser, context);
       await customParam.initModPage(page, true, { customParameter: c.skipVideoPreviewOnFirstJoin });
       await customParam.skipVideoPreviewOnFirstJoin();

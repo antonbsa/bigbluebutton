@@ -8,20 +8,13 @@ const helpers = require('./helpers');
 const e = require('./elements');
 const { ELEMENT_WAIT_TIME, ELEMENT_WAIT_LONGER_TIME, VIDEO_LOADING_WAIT_TIME } = require('./constants');
 const { checkElement, checkElementLengthEqualTo } = require('./util');
+const { generateSettingsData } = require('./settings');
 
 class Page {
   constructor(browser, page) {
     this.browser = browser;
     this.page = page;
     this.initParameters = Object.assign({}, parameters);
-  }
-
-  async getSettingsYaml() {
-    try {
-      return yaml.load(readFileSync(path.join(__dirname, '../../../bigbluebutton-html5/private/config/settings.yml'), 'utf8'));
-    } catch (err) {
-      console.log(err);
-    }
   }
 
   async bringToFront() {
@@ -43,7 +36,9 @@ class Page {
     this.meetingId = (meetingId) ? meetingId : await helpers.createMeeting(parameters, customParameter);
     const joinUrl = helpers.getJoinURL(this.meetingId, this.initParameters, isModerator, customParameter);
     await this.page.goto(joinUrl);
-    if (shouldCloseAudioModal) await this.closeAudioModal();
+    this.settings = await generateSettingsData(this.page);
+    const { autoJoinAudioModal } = this.settings;
+    if (shouldCloseAudioModal && autoJoinAudioModal) await this.closeAudioModal();
   }
 
   async handleDownload(selector, testInfo, timeout = ELEMENT_WAIT_TIME) {
@@ -66,9 +61,8 @@ class Page {
     await this.waitForSelector(e.audioModal);
     await this.waitAndClick(e.microphoneButton);
     await this.waitForSelector(e.connectingToEchoTest);
-    const parsedSettings = await this.getSettingsYaml();
-    const listenOnlyCallTimeout = parseInt(parsedSettings.public.media.listenOnlyCallTimeout);
-    await this.waitAndClick(e.echoYesButton, listenOnlyCallTimeout);
+    const { listenOnlyCallTimeout } = this.settings;
+    await this.waitAndClick(e.echoYesButton, parseInt(listenOnlyCallTimeout));
     await this.waitForSelector(e.isTalking);
   }
 

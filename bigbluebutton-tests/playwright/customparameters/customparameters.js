@@ -168,8 +168,7 @@ class CustomParameters extends MultiUsers {
     await this.modPage.shareWebcam(false);
     await this.modPage.waitAndClick(e.leaveVideo, VIDEO_LOADING_WAIT_TIME);
     await this.modPage.waitForSelector(e.joinVideo);
-    const parsedSettings = await this.modPage.getSettingsYaml();
-    const videoPreviewTimeout = parseInt(parsedSettings.public.kurento.gUMTimeout);
+    const { videoPreviewTimeout } = this.modPage.settings;
     await this.modPage.shareWebcam(videoPreviewTimeout);
   }
 

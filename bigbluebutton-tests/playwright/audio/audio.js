@@ -8,22 +8,24 @@ class Audio extends Page {
   }
 
   async joinAudio() {
+    const { autoJoinAudioModal, listenOnlyCallTimeout } = this.settings;
+    if (!autoJoinAudioModal) await this.waitAndClick(e.joinAudio);
+
     await this.waitAndClick(e.listenOnlyButton);
     await this.wasRemoved(e.connecting);
-    const parsedSettings = await this.getSettingsYaml();
-    const listenOnlyCallTimeout = parseInt(parsedSettings.public.media.listenOnlyCallTimeout);
-    await this.waitForSelector(e.leaveAudio, listenOnlyCallTimeout);
+    await this.waitForSelector(e.leaveAudio, parseInt(listenOnlyCallTimeout));
     await this.waitForSelector(e.whiteboard);
     await this.hasElement(e.leaveAudio);
   }
 
   async joinMicrophone() {
+    const { autoJoinAudioModal, listenOnlyCallTimeout } = this.settings;
+    if (!autoJoinAudioModal) await this.waitAndClick(e.joinAudio);
+
     await this.waitAndClick(e.microphoneButton);
     await this.waitForSelector(e.connectingToEchoTest);
     await this.wasRemoved(e.connectingToEchoTest, ELEMENT_WAIT_LONGER_TIME);
-    const parsedSettings = await this.getSettingsYaml();
-    const listenOnlyCallTimeout = parseInt(parsedSettings.public.media.listenOnlyCallTimeout);
-    await this.waitAndClick(e.echoYesButton, listenOnlyCallTimeout);
+    await this.waitAndClick(e.echoYesButton, parseInt(listenOnlyCallTimeout));
     await this.waitForSelector(e.whiteboard);
     await this.hasElement(e.isTalking);
   }
