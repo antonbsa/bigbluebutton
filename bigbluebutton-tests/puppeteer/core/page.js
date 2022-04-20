@@ -143,7 +143,7 @@ class Page {
 
   async closeAudioModal() {
     await this.waitForSelector(e.audioModal);
-    await this.waitAndClick(e.closeAudioButton);
+    await this.waitAndClick(e.closeModal);
   }
 
   async setDownloadBehavior(downloadPath) {

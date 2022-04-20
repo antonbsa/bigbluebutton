@@ -1,8 +1,8 @@
 const Page = require('../core/page');
 const { exec } = require("child_process");
-const { CLIENT_RECONNECTION_TIMEOUT, ELEMENT_WAIT_TIME } = require('../core/constants'); // core constants (Timeouts vars imported)
+const { CLIENT_RECONNECTION_TIMEOUT, ELEMENT_WAIT_TIME } = require('../core/constants');
 const { sleep } = require('../core/helper');
-const screenshareUtil = require('../screenshare/util');
+const { startScreenshare } = require('../screenshare/util');
 const e = require('../core/elements');
 const { checkElement } = require('../core/util');
 
@@ -31,7 +31,7 @@ class Trigger extends Page {
       await sleep(3000);
       await this.screenshot(`${testName}`, `03-after-meteor-reconnection-[${this.meetingId}]`);
 
-      const findUnauthorized = await this.hasElement(e.unauthorized);
+      const findUnauthorized = await this.hasElement(e.errorScreenMessage);
       await this.logger('Check if Unauthorized message appears => ', findUnauthorized);
       return meteorStatusConfirm && getAudioButton && findUnauthorized;
     } catch (err) {
@@ -112,6 +112,7 @@ class Trigger extends Page {
         return false;
       }
 
+      console.log("passou aqui")
       await this.init(true, false, testName, 'Moderator', undefined, undefined, undefined, undefined, ['--disable-http2']);
       await this.screenshot(testName, '01-after-close-audio-modal');
       await this.page.setRequestInterception(true);
@@ -159,7 +160,7 @@ class Trigger extends Page {
       await this.screenshot(testName, '02-after-join-microphone');
       await this.shareWebcam(true);
       await this.screenshot(testName, '03-after-share-webcam');
-      await screenshareUtil.startScreenshare(this);
+      await startScreenshare(this);
       await this.screenshot(testName, '04-after-start-screenshare');
 
       await this.runScript(`sudo tcpkill -i ${tcpInterface} port ${ipArgs.port} and host ${remoteIp}`, { timeout: 7500 });
@@ -179,6 +180,7 @@ class Trigger extends Page {
   async runScript(script, { handleError, handleOutput, timeout }) {
     return new Promise((res, rej) => {
       return exec(script, { timeout }, (err, stdout, stderr) => {
+        console.log({err, stdout, stderr})
         res(handleError ? handleError(stderr) : handleOutput ? handleOutput(stdout) : null)
       })
     })
