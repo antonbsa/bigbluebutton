@@ -120,20 +120,19 @@ jobs:
             bbb-conf --salt bbbci
             bbb-conf --restart
             '
-      - name: Run tests
+      - name: Install tests dependencies
         run: |
             sh -c '
-            echo "Teste"
             cd /home/runner/work/bigbluebutton/bigbluebutton/bigbluebutton-tests/playwright/
             echo "
             BBB_URL=\"https://bbb-ci.test/bigbluebutton/api\"
             BBB_SECRET=\"bbbci\"
-
-            DEBUG_MODE=\"\"
             " > .env
             npm install
             npx playwright install-deps
             npx playwright install
             export NODE_TLS_REJECT_UNAUTHORIZED='0'
-            npx playwright test --project=chromium --grep @ci
+            export CI='true'
             '
+      - name: Run tests
+        run: npx playwright test --project=chromium --grep @ci
