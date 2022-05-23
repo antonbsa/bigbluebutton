@@ -135,4 +135,8 @@ jobs:
             export CI='true'
             '
       - name: Run tests
-        run: npx playwright test --project=chromium --grep @ci
+        run: |
+            sudo sh -c '
+            cd /home/runner/work/bigbluebutton/bigbluebutton/bigbluebutton-tests/playwright/
+            npx playwright test --project=chromium --grep @ci
+            '
