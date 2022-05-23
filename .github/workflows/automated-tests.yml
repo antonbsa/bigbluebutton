@@ -138,5 +138,6 @@ jobs:
         run: |
             sudo sh -c '
             cd /home/runner/work/bigbluebutton/bigbluebutton/bigbluebutton-tests/playwright/
+            PLAYWRIGHT_BROWSERS_PATH=${{ secrets.PLAYWRIGHT_BROWSERS_PATH }}
             npx playwright test --project=chromium --grep @ci
             '
