@@ -135,18 +135,19 @@ jobs:
             export CI='true'
             '
       - name: Run tests
+        working-directory: bigbluebutton-tests/playwright
         run: |
             sudo sh -c '
             echo "====== aqui"
 
             echo -n "pasta atual: "
             pwd
-            # echo "conteúdo pasta atual: "
-            # ls
-            echo "conteúdo recursivo da pasta atual:"
-            find ~/ -maxdepth 3
+            # echo "conteúdo recursivo da pasta atual:"
+            # find ~/ -maxdepth 3
 
             cd /home/runner/work/bigbluebutton/bigbluebutton/bigbluebutton-tests/playwright/
+            # echo "conteúdo pasta atual: "
+            # ls
             # PLAYWRIGHT_BROWSERS_PATH=${{ secrets.PLAYWRIGHT_BROWSERS_PATH }}
             npx playwright test --project=chromium --grep @ci
             '
