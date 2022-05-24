@@ -48,6 +48,12 @@ jobs:
           wget -q "http://ci.bbbvm.imdt.com.br/artifacts.tar"
           tar xf artifacts.tar
           '
+      - name: Archive packages
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifacts.tar
+          path: |
+            artifacts.tar
       - name: Generate CA
         run: |
           sudo sh -c '
