@@ -50,8 +50,12 @@ const config = {
   ],
 };
 
-if (process.env.DEBUG_MODE === 'true') {
-  config.reporter.push(['html', { open: 'never' }]);
+const DEBUG_MODE = process.env.DEBUG_MODE === 'true';
+const CI = process.env.CI === 'true';
+
+if (DEBUG_MODE) config.reporter.push(['html', { open: 'never' }]);
+
+if (CI || DEBUG_MODE) {
   config.use.screenshot = 'only-on-failure';
   config.use.trace = 'retain-on-failure';
 }

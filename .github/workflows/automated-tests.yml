@@ -135,3 +135,8 @@ jobs:
             export NODE_TLS_REJECT_UNAUTHORIZED='0'
             npx playwright test --project=chromium --grep @ci
             '
+      - name: Archive tests reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: bigbluebutton-tests/playwright/test-results
