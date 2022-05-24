@@ -127,11 +127,11 @@ jobs:
             echo "
             BBB_URL=\"https://bbb-ci.test/bigbluebutton/api\"
             BBB_SECRET=\"bbbci\"
+            CI=\"true\"
             " > .env
             npm install
             npx playwright install-deps
             npx playwright install
             export NODE_TLS_REJECT_UNAUTHORIZED='0'
-            export CI='true'
             npx playwright test --project=chromium --grep @ci
             '
