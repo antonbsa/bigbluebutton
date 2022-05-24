@@ -120,7 +120,7 @@ jobs:
             bbb-conf --salt bbbci
             bbb-conf --restart
             '
-      - name: Install tests dependencies
+      - name: Run tests
         run: |
             sh -c '
             cd /home/runner/work/bigbluebutton/bigbluebutton/bigbluebutton-tests/playwright/
@@ -133,21 +133,5 @@ jobs:
             npx playwright install
             export NODE_TLS_REJECT_UNAUTHORIZED='0'
             export CI='true'
-            '
-      - name: Run tests
-        working-directory: bigbluebutton-tests/playwright
-        run: |
-            sudo sh -c '
-            echo "====== aqui"
-
-            echo -n "pasta atual: "
-            pwd
-            # echo "conteúdo recursivo da pasta atual:"
-            # find ~/ -maxdepth 3
-
-            cd /home/runner/work/bigbluebutton/bigbluebutton/bigbluebutton-tests/playwright/
-            # echo "conteúdo pasta atual: "
-            # ls
-            # PLAYWRIGHT_BROWSERS_PATH=${{ secrets.PLAYWRIGHT_BROWSERS_PATH }}
             npx playwright test --project=chromium --grep @ci
             '
