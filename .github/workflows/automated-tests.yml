@@ -136,7 +136,9 @@ jobs:
             npx playwright test --project=chromium --grep @ci
             '
       - name: Archive tests reports
+        continue-on-error: true
         uses: actions/upload-artifact@v3
         with:
           name: test-results
-          path: bigbluebutton-tests/playwright/test-results
+          path: |
+            bigbluebutton-tests/playwright/test-results

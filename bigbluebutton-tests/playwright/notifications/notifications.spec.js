@@ -12,7 +12,7 @@ test.describe.parallel('Notifications', () => {
 
   test('Audio notifications @ci', async ({ browser, context, page }) => {
     const notifications = new Notifications(browser, context);
-    await notifications.initModPage(page);
+    await notifications.initModPage(page, true);
     await notifications.audioNotification();
   });
 
@@ -49,7 +49,7 @@ test.describe.parallel('Notifications', () => {
       await presenterNotifications.publishPollResults();
     });
 
-    test.fixme('Presentation upload notification', async ({ browser, context, page }) => { // this test is unstable, there's an apparent timing issue around the visibility of smallToastMsg
+    test('Presentation upload notification', async ({ browser, context, page }) => {
       const presenterNotifications = new PresenterNotifications(browser, context);
       await presenterNotifications.initPages(page);
       await presenterNotifications.fileUploaderNotification();

@@ -6,7 +6,7 @@ const helpers = require('./helpers');
 const e = require('./elements');
 const { ELEMENT_WAIT_TIME, ELEMENT_WAIT_LONGER_TIME, VIDEO_LOADING_WAIT_TIME } = require('./constants');
 const { checkElement, checkElementLengthEqualTo } = require('./util');
-const { generateSettingsData } = require('./settings');
+const { generateSettingsData, getSettings } = require('./settings');
 
 class Page {
   constructor(browser, page) {
@@ -47,7 +47,7 @@ class Page {
     await expect(download).toBeTruthy();
     const filePath = await download.path();
     const content = await readFileSync(filePath, 'utf8');
-    await testInfo.attach('downloaded', { filePath });
+    await testInfo.attach('downloaded', { body: download });
 
     return {
       download,
@@ -59,7 +59,7 @@ class Page {
     await this.waitForSelector(e.audioModal);
     await this.waitAndClick(e.microphoneButton);
     await this.waitForSelector(e.connectingToEchoTest);
-    const { listenOnlyCallTimeout } = this.settings;
+    const { listenOnlyCallTimeout } = getSettings();
     await this.waitAndClick(e.echoYesButton, listenOnlyCallTimeout);
     await this.waitForSelector(e.isTalking);
   }
@@ -75,7 +75,7 @@ class Page {
   }
 
   async shareWebcam(shouldConfirmSharing = true, videoPreviewTimeout = ELEMENT_WAIT_TIME) {
-    const { webcamSharingEnabled } = this.settings;
+    const { webcamSharingEnabled } = getSettings();
     test.fail(!webcamSharingEnabled, 'Webcam sharing is disabled');
 
     await this.waitAndClick(e.joinVideo);

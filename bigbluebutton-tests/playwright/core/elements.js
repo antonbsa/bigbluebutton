@@ -148,7 +148,7 @@ exports.pollYesNoAbstentionBtn = 'button[data-test="pollYesNoAbstentionBtn"]';
 
 // Presentation
 exports.uploadPresentationFileName = 'uploadTest.png';
-exports.presentationPlaceholderLabel = 'Waiting for a presentation to be uploaded';
+exports.presentationPlaceholderLabel = 'There is no currently active presentation';
 exports.startScreenSharing = 'button[data-test="startScreenShare"]';
 exports.stopScreenSharing = 'button[data-test="stopScreenShare"]';
 exports.managePresentations = 'li[data-test="managePresentations"]';

@@ -1,9 +1,11 @@
-const { expect, default: test } = require('@playwright/test');
+const { expect, test } = require('@playwright/test');
 const { MultiUsers } = require('../user/multiusers');
 const e = require('../core/elements');
 const util = require('./util.js');
 const utilPresentation = require('../presentation/util');
 const { ELEMENT_WAIT_LONGER_TIME } = require('../core/constants');
+const { getSettings } = require('../core/settings');
+const { waitAndClearNotification } = require('../notifications/util');
 
 class Polling extends MultiUsers {
   constructor(browser, context) {
@@ -27,6 +29,7 @@ class Polling extends MultiUsers {
 
   async quickPoll() {
     await this.modPage.waitForSelector(e.whiteboard, ELEMENT_WAIT_LONGER_TIME);
+    await waitAndClearNotification(this.modPage);
     await utilPresentation.uploadPresentation(this.modPage, e.questionSlideFileName);
 
     await this.modPage.waitAndClick(e.quickPoll);
