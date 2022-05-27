@@ -19,7 +19,6 @@ jobs:
           exit 1
           '
       - if: always()
-      - name: Archive tests reports
         uses: actions/upload-artifact@v3
         with:
           name: dale
