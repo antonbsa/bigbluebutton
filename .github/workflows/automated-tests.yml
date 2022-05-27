@@ -121,14 +121,14 @@ jobs:
             bbb-conf --restart
             '
       - name: Run tests
+        id: tests-execution
         continue-on-error: true
+        env:
+          BBB_URL: "https://bbb-ci.test/bigbluebutton/api"
+          BBB_SECRET: "bbbci"
         run: |
             sh -c '
             cd /home/runner/work/bigbluebutton/bigbluebutton/bigbluebutton-tests/playwright/
-            echo "
-            BBB_URL=\"https://bbb-ci.test/bigbluebutton/api\"
-            BBB_SECRET=\"bbbci\"
-            " > .env
             npm install
             npx playwright install-deps
             npx playwright install
@@ -138,7 +138,9 @@ jobs:
             '
       - name: Archive tests reports
         uses: actions/upload-artifact@v3
-        if: always()
         with:
           name: test-results
           path: bigbluebutton-tests/playwright/test-results
+      - name: Check result
+        if: steps.tests-execution.outcome != 'success'
+        run: exit 1
