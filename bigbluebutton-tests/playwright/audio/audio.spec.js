@@ -2,7 +2,6 @@ const { test } = require('@playwright/test');
 const { Audio } = require('./audio');
 
 test.describe.parallel('Audio', () => {
-  console.log(`====== HERE :> ${process.env.CI === 'true'}`)
   test('Join audio with Listen Only @ci-wip', async ({ browser, page }) => {
     const audio = new Audio(browser, page);
     await audio.init(true, false);
