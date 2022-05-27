@@ -133,10 +133,12 @@ jobs:
             npx playwright install-deps
             npx playwright install
             export NODE_TLS_REJECT_UNAUTHORIZED='0'
+            export ACTIONS_RUNNER_DEBUG='true'
             npm run test-ci
             '
       - name: Archive tests reports
         uses: actions/upload-artifact@v3
         with:
+          if: always()
           name: test-results
           path: bigbluebutton-tests/playwright/test-results
