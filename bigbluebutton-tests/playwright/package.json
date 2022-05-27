@@ -3,7 +3,8 @@
     "test": "npx playwright test",
     "test:filter": "npx playwright test -g",
     "test:headed": "npx playwright test --headed",
-    "test:debug": "npx playwright test --debug -g"
+    "test:debug": "npx playwright test --debug -g",
+    "test-ci": "export CI='true' && npx playwright test --project=chromium --grep @ci-wip"
   },
   "devDependencies": {
     "@playwright/test": "^1.19.2",
