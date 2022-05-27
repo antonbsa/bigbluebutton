@@ -67,7 +67,6 @@ jobs:
           sudo cp /root/bbb-ci-ssl/bbb-dev-ca.crt /usr/local/share/ca-certificates/bbb-dev/
           sudo chmod 644 /usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt
           sudo update-ca-certificates
-
           '
       - name: Generate certificate
         run: |
@@ -95,7 +94,6 @@ jobs:
           cat /root/bbb-ci-ssl/bbb-ci.test.crt > /local/certs/fullchain.pem
           cat /root/bbb-ci-ssl/bbb-dev-ca.crt >> /local/certs/fullchain.pem
           cat /root/bbb-ci-ssl/bbb-ci.test.key > /local/certs/privkey.pem
-
           '
       - name: Setup local repository
         run: |
@@ -121,8 +119,6 @@ jobs:
             bbb-conf --restart
             '
       - name: Run tests
-        id: tests-execution
-        continue-on-error: true
         env:
           BBB_URL: "https://bbb-ci.test/bigbluebutton/api"
           BBB_SECRET: "bbbci"
@@ -136,11 +132,8 @@ jobs:
             export ACTIONS_RUNNER_DEBUG='true'
             npm run test-ci
             '
-      - name: Archive tests reports
+      - if: always()
         uses: actions/upload-artifact@v3
         with:
           name: test-results
           path: bigbluebutton-tests/playwright/test-results
-      - name: Check result
-        if: steps.tests-execution.outcome != 'success'
-        run: exit 1
