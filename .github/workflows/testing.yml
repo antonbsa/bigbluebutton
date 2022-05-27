@@ -1,0 +1,25 @@
+name: 'Oie'
+on:
+  push:
+    branches:
+      - 'develop'
+      - 'v2.[5-9].x-release'
+      - 'v[3-9].*.x-release'
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  testing-stuff:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Forced failure
+        run: |
+          sudo sh -c '
+          echo "failing..."
+          exit 1
+          '
+      - if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: dale
+          path: bigbluebutton-tests/playwright/playwright.config.js
