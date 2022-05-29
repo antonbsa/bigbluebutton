@@ -136,4 +136,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-results
-          path: bigbluebutton-tests/playwright/test-results
+          path: bigbluebutton-tests/playwright/playwright-report

@@ -3,7 +3,10 @@ require('dotenv').config();
 const config = {
   workers: 1,
   timeout: 3 * 60 * 1000,
-  reporter: [['list']],
+  reporter: [
+    ['list'],
+    ['html', { open: 'never' }]
+  ],
   use: {
     headless: true,
   },
@@ -55,8 +58,8 @@ const CI = process.env.CI === 'true';
 
 // if (CI) config.retries = 1;
 
+config.reporter.push();
 if (CI || DEBUG_MODE) {
-  config.reporter.push(['html', { open: 'never' }]);
   config.use.screenshot = 'only-on-failure';
   config.use.trace = 'retain-on-failure';
 }
