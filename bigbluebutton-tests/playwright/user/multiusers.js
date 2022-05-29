@@ -1,7 +1,7 @@
 const { expect, default: test } = require('@playwright/test');
 const Page = require('../core/page');
 const e = require('../core/elements');
-const { waitAndClearNotification, waitAndClearPresentationFirstNotification } = require('../notifications/util');
+const { waitAndClearNotification } = require('../notifications/util');
 const { sleep } = require('../core/helpers');
 const { checkAvatarIcon, checkIsPresenter } = require('./util');
 const { checkTextContent } = require('../core/util');
@@ -124,8 +124,8 @@ class MultiUsers {
     const { raiseHandButton } = getSettings();
     test.fail(!raiseHandButton, 'Raise/lower hand button is disabled');
 
-    await waitAndClearPresentationFirstNotification(this.modPage);
-    await waitAndClearPresentationFirstNotification(this.userPage);
+    await waitAndClearNotification(this.modPage);
+    await waitAndClearNotification(this.userPage);
     await this.userPage.waitAndClick(e.raiseHandBtn);
     await sleep(1000);
     await this.userPage.hasElement(e.lowerHandBtn);

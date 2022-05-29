@@ -49,13 +49,8 @@ async function privateChatMessageToast(page2) {
 }
 
 async function waitAndClearNotification(testPage) {
-  await testPage.waitAndClick(e.smallToastMsg);
+  await testPage.waitAndClick(e.smallToastMsg, ELEMENT_WAIT_LONGER_TIME);
   await testPage.wasRemoved(e.smallToastMsg);
-}
-
-async function waitAndClearPresentationFirstNotification(testPage) {
-  await testPage.waitForSelector(e.whiteboard, ELEMENT_WAIT_LONGER_TIME);
-  await waitAndClearNotification(testPage);
 }
 
 exports.privateChatMessageToast = privateChatMessageToast;
@@ -66,4 +61,3 @@ exports.checkNotificationIcon = checkNotificationIcon;
 exports.enableChatPopup = enableChatPopup;
 exports.saveSettings = saveSettings;
 exports.waitAndClearNotification = waitAndClearNotification;
-exports.waitAndClearPresentationFirstNotification = waitAndClearPresentationFirstNotification;

@@ -4,7 +4,7 @@ const util = require('./util');
 const { openSettings } = require('../settings/util');
 const { ELEMENT_WAIT_LONGER_TIME } = require('../core/constants');
 const { default: test } = require('@playwright/test');
-const { waitAndClearPresentationFirstNotification } = require('../notifications/util');
+const { waitAndClearNotification } = require('../notifications/util');
 const { getSettings } = require('../core/settings');
 
 class Notifications extends MultiUsers {
@@ -19,7 +19,7 @@ class Notifications extends MultiUsers {
   }
 
   async audioNotification() {
-    await waitAndClearPresentationFirstNotification(this.modPage);
+    await waitAndClearNotification(this.modPage);
     await this.modPage.waitAndClick(e.joinAudio);
     await this.modPage.joinMicrophone();
     await util.checkNotificationText(this.modPage, e.joinAudioToast);
@@ -35,7 +35,7 @@ class Notifications extends MultiUsers {
   }
 
   async getUserJoinPopupResponse() {
-    await waitAndClearPresentationFirstNotification(this.modPage);
+    await waitAndClearNotification(this.modPage);
     await this.userJoinNotification(this.modPage);
     await util.waitAndClearNotification(this.modPage);
     await this.initUserPage();
@@ -47,7 +47,7 @@ class Notifications extends MultiUsers {
     const { raiseHandButton } = getSettings();
     test.fail(!raiseHandButton, 'Raise/lower hand button is disabled');
 
-    await waitAndClearPresentationFirstNotification(this.modPage);
+    await waitAndClearNotification(this.modPage);
     await this.modPage.waitAndClick(e.raiseHandBtn);
     await this.modPage.waitForSelector(e.smallToastMsg);
     await util.checkNotificationText(this.modPage, e.raisingHandToast);

@@ -53,10 +53,10 @@ const config = {
 const DEBUG_MODE = process.env.DEBUG_MODE === 'true';
 const CI = process.env.CI === 'true';
 
-if (DEBUG_MODE) config.reporter.push(['html', { open: 'never' }]);
 // if (CI) config.retries = 1;
 
 if (CI || DEBUG_MODE) {
+  config.reporter.push(['html', { open: 'never' }]);
   config.use.screenshot = 'only-on-failure';
   config.use.trace = 'retain-on-failure';
 }

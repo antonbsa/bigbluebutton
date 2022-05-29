@@ -4,8 +4,8 @@ const e = require('../core/elements');
 const utilPolling = require('../polling/util');
 const utilScreenShare = require('../screenshare/util');
 const utilPresentation = require('../presentation/util');
-const { ELEMENT_WAIT_LONGER_TIME, UPLOAD_PDF_WAIT_TIME } = require('../core/constants');
-const { waitAndClearPresentationFirstNotification } = require("../notifications/util");
+const { UPLOAD_PDF_WAIT_TIME } = require('../core/constants');
+const { waitAndClearNotification } = require("../notifications/util");
 
 class PresenterNotifications extends MultiUsers {
   constructor(browser, context) {
@@ -13,14 +13,14 @@ class PresenterNotifications extends MultiUsers {
   }
 
   async publishPollResults() {
-    await waitAndClearPresentationFirstNotification(this.modPage);
+    await waitAndClearNotification(this.modPage);
     await utilPolling.startPoll(this.modPage, true);
     await this.modPage.waitForSelector(e.smallToastMsg);
     await util.checkNotificationText(this.modPage, e.pollPublishedToast);
   }
 
   async fileUploaderNotification() {
-    await waitAndClearPresentationFirstNotification(this.modPage);
+    await waitAndClearNotification(this.modPage);
     await utilPresentation.uploadPresentation(this.modPage, e.pdfFileName, UPLOAD_PDF_WAIT_TIME);
     await util.checkNotificationText(this.userPage, e.presentationUploadedToast);
   }
