@@ -136,5 +136,7 @@ jobs:
       - if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: test-results
-          path: bigbluebutton-tests/playwright/playwright-report
+          name: tests-report
+          path: |
+            bigbluebutton-tests/playwright/playwright-report
+            bigbluebutton-tests/playwright/test-results
