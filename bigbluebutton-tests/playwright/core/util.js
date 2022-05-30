@@ -1,7 +1,4 @@
 const { expect } = require("@playwright/test");
-const { ELEMENT_WAIT_LONGER_TIME } = require('../core/constants');
-const { waitAndClearNotification } = require("../notifications/util");
-const e = require('../core/elements');
 
 // Common
 function checkElement([element, index = 0]) {

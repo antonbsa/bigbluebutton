@@ -33,7 +33,10 @@ class Page {
 
     this.meetingId = (meetingId) ? meetingId : await helpers.createMeeting(parameters, customParameter);
     const joinUrl = helpers.getJoinURL(this.meetingId, this.initParameters, isModerator, customParameter);
-    await this.page.goto(joinUrl);
+    const response = await this.page.goto(joinUrl);
+    await expect(response.ok()).toBeTruthy();
+    const hasErrorLabel = await this.page.evaluate(checkElement, [e.errorMessageLabel]);
+    await expect(hasErrorLabel, 'Getting error when joining. Check if the BBB_URL and BBB_SECRET are set correctly').toBeFalsy();
     this.settings = await generateSettingsData(this.page);
     const { autoJoinAudioModal } = this.settings;
     if (shouldCloseAudioModal && autoJoinAudioModal) await this.closeAudioModal();
