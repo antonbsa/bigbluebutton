@@ -48,6 +48,7 @@ jobs:
           wget -q "http://ci.bbbvm.imdt.com.br/artifacts.tar"
           tar xf artifacts.tar
           '
+      - run: ./build/setup.sh bbb-html5
       - name: Generate CA
         run: |
           sudo sh -c '
@@ -119,10 +120,7 @@ jobs:
             echo "NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt" >> /usr/share/meteor/bundle/bbb-html5-with-roles.conf
             bbb-conf --restart
             '
-      - name: Run tests
-        env:
-          BBB_URL: "https://bbb-ci.test/bigbluebutton/api"
-          BBB_SECRET: "bbbci"
+      - name: Install test dependencies
         run: |
             sh -c '
             cd /home/runner/work/bigbluebutton/bigbluebutton/bigbluebutton-tests/playwright/
@@ -130,8 +128,12 @@ jobs:
             npx playwright install --with-deps
             export NODE_EXTRA_CA_CERTS="/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt"
             export ACTIONS_RUNNER_DEBUG="true"
-            npm run test-ci
             '
+      - name: Run tests
+        env:
+          BBB_URL: "https://bbb-ci.test/bigbluebutton/api"
+          BBB_SECRET: "bbbci"
+        run: npm run test-ci_WIP
       - if: always()
         uses: actions/upload-artifact@v3
         with:
