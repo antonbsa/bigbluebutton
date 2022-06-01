@@ -126,9 +126,8 @@ jobs:
         run: |
             sh -c '
             cd /home/runner/work/bigbluebutton/bigbluebutton/bigbluebutton-tests/playwright/
-            npm install
-            npx playwright install-deps
-            npx playwright install
+            npm ci
+            npx playwright install --with-deps
             export NODE_EXTRA_CA_CERTS="/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt"
             export ACTIONS_RUNNER_DEBUG="true"
             npm run test-ci

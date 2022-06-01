@@ -19,7 +19,7 @@ class Notifications extends MultiUsers {
   }
 
   async audioNotification() {
-    await waitAndClearNotification(this.modPage);
+    await waitAndClearDefaultPresentationNotification(this.modPage);
     await this.modPage.waitAndClick(e.joinAudio);
     await this.modPage.joinMicrophone();
     await util.checkNotificationText(this.modPage, e.joinAudioToast);
@@ -35,7 +35,7 @@ class Notifications extends MultiUsers {
   }
 
   async getUserJoinPopupResponse() {
-    await waitAndClearNotification(this.modPage);
+    await waitAndClearDefaultPresentationNotification(this.modPage);
     await this.userJoinNotification(this.modPage);
     await util.waitAndClearNotification(this.modPage);
     await this.initUserPage();
@@ -47,7 +47,7 @@ class Notifications extends MultiUsers {
     const { raiseHandButton } = getSettings();
     test.fail(!raiseHandButton, 'Raise/lower hand button is disabled');
 
-    await waitAndClearNotification(this.modPage);
+    await waitAndClearDefaultPresentationNotification(this.modPage);
     await this.modPage.waitAndClick(e.raiseHandBtn);
     await this.modPage.waitForSelector(e.smallToastMsg);
     await util.checkNotificationText(this.modPage, e.raisingHandToast);

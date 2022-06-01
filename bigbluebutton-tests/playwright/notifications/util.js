@@ -2,6 +2,7 @@ const { expect } = require('@playwright/test');
 const { ELEMENT_WAIT_LONGER_TIME } = require('../core/constants');
 const e = require('../core/elements');
 const { sleep } = require('../core/helpers');
+const { checkElement } = require('../core/util');
 
 async function enableChatPopup(test) {
   await test.waitAndClick(e.notificationsTab);
@@ -53,6 +54,14 @@ async function waitAndClearNotification(testPage) {
   await testPage.wasRemoved(e.smallToastMsg);
 }
 
+async function waitAndClearDefaultPresentationNotification(testPage) {
+  const hasPresentationUploaded = await testPage.page.evaluate(checkElement, e.whiteboard);
+  if (!hasPresentationUploaded) {
+    await testPage.waitForSelector(e.whiteboard, ELEMENT_WAIT_LONGER_TIME);
+    await waitAndClearNotification(testPage);
+  }
+}
+
 exports.privateChatMessageToast = privateChatMessageToast;
 exports.publicChatMessageToast = publicChatMessageToast;
 exports.enableUserJoinPopup = enableUserJoinPopup;
@@ -61,3 +70,4 @@ exports.checkNotificationIcon = checkNotificationIcon;
 exports.enableChatPopup = enableChatPopup;
 exports.saveSettings = saveSettings;
 exports.waitAndClearNotification = waitAndClearNotification;
+exports.waitAndClearDefaultPresentationNotification = waitAndClearDefaultPresentationNotification;

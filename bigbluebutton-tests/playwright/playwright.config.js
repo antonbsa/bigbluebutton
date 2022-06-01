@@ -1,11 +1,14 @@
 require('dotenv').config();
 
+const CI = process.env.CI === 'true';
+const DEBUG_MODE = process.env.DEBUG_MODE === 'true';
+
 const config = {
   workers: 1,
   timeout: 3 * 60 * 1000,
   reporter: [
-    ['list'],
-    ['html', { open: 'never' }]
+    [CI ? 'github' : 'list'],
+    ['html', { open: 'never' }],
   ],
   use: {
     headless: true,
@@ -53,10 +56,7 @@ const config = {
   ],
 };
 
-const DEBUG_MODE = process.env.DEBUG_MODE === 'true';
-const CI = process.env.CI === 'true';
-
-// if (CI) config.retries = 1;
+if (CI) config.retries = 1;
 
 config.reporter.push();
 if (CI || DEBUG_MODE) {

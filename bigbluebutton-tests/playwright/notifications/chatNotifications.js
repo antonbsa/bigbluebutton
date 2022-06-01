@@ -3,7 +3,6 @@ const util = require('./util');
 const e = require('../core/elements');
 const { openSettings } = require('../settings/util');
 const { sleep } = require("../core/helpers");
-const { waitAndClearNotification } = require("../notifications/util");
 
 class ChatNotifications extends MultiUsers {
   constructor(browser, context) {
@@ -11,7 +10,7 @@ class ChatNotifications extends MultiUsers {
   }
 
   async publicChatNotification() {
-    await waitAndClearNotification(this.modPage);
+    await util.waitAndClearDefaultPresentationNotification(this.modPage);
     await openSettings(this.modPage);
     await util.enableChatPopup(this.modPage);
     await util.saveSettings(this.modPage);
@@ -25,7 +24,7 @@ class ChatNotifications extends MultiUsers {
   }
 
   async privateChatNotification() {
-    await waitAndClearNotification(this.modPage);
+    await util.waitAndClearDefaultPresentationNotification(this.modPage);
     await openSettings(this.modPage);
     await util.enableChatPopup(this.modPage);
     await util.saveSettings(this.modPage);
