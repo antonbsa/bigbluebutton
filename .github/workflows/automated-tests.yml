@@ -119,15 +119,13 @@ jobs:
       #       echo "NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt" >> /usr/share/meteor/bundle/bbb-html5-with-roles.conf
       #       bbb-conf --restart
       #       '
-      - name: Install test dependencies
+      - name: Install tests dependencies
+        working-directory: ./bigbluebutton-tests/playwright
         run: |
-            sh -c '
-            cd /home/runner/work/bigbluebutton/bigbluebutton/bigbluebutton-tests/playwright/
-            npm ci
-            npx playwright install --with-deps
-            export NODE_EXTRA_CA_CERTS="/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt"
-            export ACTIONS_RUNNER_DEBUG="true"
-            '
+          npm ci
+          npx playwright install --with-deps
+          export NODE_EXTRA_CA_CERTS="/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt"
+          export ACTIONS_RUNNER_DEBUG="true"
       - name: Run tests
         working-directory: ./bigbluebutton-tests/playwright
         env:
