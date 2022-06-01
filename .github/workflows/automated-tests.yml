@@ -19,7 +19,7 @@ jobs:
       # - run: ./build/setup.sh bbb-freeswitch-core
       # - run: ./build/setup.sh bbb-freeswitch-sounds
       # - run: ./build/setup.sh bbb-fsesl-akka
-      # - run: ./build/setup.sh bbb-html5
+      - run: ./build/setup.sh bbb-html5
       # - run: ./build/setup.sh bbb-learning-dashboard
       # - run: ./build/setup.sh bbb-libreoffice-docker
       # - run: ./build/setup.sh bbb-mkclean
@@ -48,7 +48,6 @@ jobs:
           wget -q "http://ci.bbbvm.imdt.com.br/artifacts.tar"
           tar xf artifacts.tar
           '
-      - run: ./build/setup.sh bbb-html5
       - name: Generate CA
         run: |
           sudo sh -c '
