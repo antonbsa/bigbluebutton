@@ -16,8 +16,8 @@ jobs:
       # - run: ./build/setup.sh bbb-apps-akka
       # - run: ./build/setup.sh bbb-config
       # - run: ./build/setup.sh bbb-etherpad
-      # - run: ./build/setup.sh bbb-freeswitch-core
-      # - run: ./build/setup.sh bbb-freeswitch-sounds
+      - run: ./build/setup.sh bbb-freeswitch-core
+      - run: ./build/setup.sh bbb-freeswitch-sounds
       # - run: ./build/setup.sh bbb-fsesl-akka
       - run: ./build/setup.sh bbb-html5
       # - run: ./build/setup.sh bbb-learning-dashboard
@@ -32,7 +32,7 @@ jobs:
       # - run: ./build/setup.sh bbb-record-core
       # - run: ./build/setup.sh bbb-web
       # - run: ./build/setup.sh bbb-webrtc-sfu
-      # - run: ./build/setup.sh bigbluebutton
+      - run: ./build/setup.sh bigbluebutton
       # - run: tar cvf artifacts.tar artifacts/
       # - name: Archive packages
       #   uses: actions/upload-artifact@v3
