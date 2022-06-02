@@ -12,14 +12,28 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Forced failure
+      - name: Installing test dependencies
+        working-directory: ./bigbluebutton-tests/playwright
         run: |
-          sudo sh -c '
-          echo "failing..."
-          exit 1
-          '
-      - if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: dale
-          path: bigbluebutton-tests/playwright/nao-existe.config.js
+          npm install
+          npx playwright install
+          npx playwright install-deps
+          export NODE_EXTRA_CA_CERTS="/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt"
+          export ACTIONS_RUNNER_DEBUG="true"
+      - name: Run tests
+        working-directory: ./bigbluebutton-tests/playwright
+        env:
+          BBB_URL: "https://dev25.bigbluebutton.org/bigbluebutton/api"
+          BBB_SECRET: "zPRyjPtHOoDcM75jFy2k1oeQXNEJCt0BEMdKjFZKo"
+        run: npm test audio -- --project=chromium
+      # - name: Forced failure
+      #   run: |
+      #     sudo sh -c '
+      #     echo "failing..."
+      #     exit 1
+      #     '
+      # - if: always()
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: dale
+      #     path: bigbluebutton-tests/playwright/nao-existe.config.js
