@@ -122,8 +122,11 @@ jobs:
       - name: Install test dependencies
         working-directory: ./bigbluebutton-tests/playwright
         run: |
-          npm ci
-          npx playwright install --with-deps
+        sudo sh -c '
+        npm ci
+        npx playwright install-deps
+        npx playwright install
+        '
       - name: Run tests
         working-directory: ./bigbluebutton-tests/playwright
         env:
