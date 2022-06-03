@@ -8,12 +8,10 @@
     "test-ci_WIP": "export CI='true' && npx playwright test --project=chromium --grep @ci-wip"
   },
   "dependencies": {
+    "@playwright/test": "^1.19.2",
+    "playwright": "^1.19.2",
     "axios": "^0.26.1",
     "dotenv": "^16.0.0",
     "sha1": "^1.1.1"
-  },
-  "devDependencies": {
-    "@playwright/test": "^1.19.2",
-    "playwright": "^1.19.2"
   }
 }

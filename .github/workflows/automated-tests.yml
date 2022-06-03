@@ -13,41 +13,41 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: ./build/get_external_dependencies.sh
-      - run: ./build/setup.sh bbb-apps-akka
-      - run: ./build/setup.sh bbb-config
-      - run: ./build/setup.sh bbb-etherpad
-      - run: ./build/setup.sh bbb-freeswitch-core
-      - run: ./build/setup.sh bbb-freeswitch-sounds
-      - run: ./build/setup.sh bbb-fsesl-akka
-      - run: ./build/setup.sh bbb-html5
-      - run: ./build/setup.sh bbb-learning-dashboard
-      - run: ./build/setup.sh bbb-libreoffice-docker
-      - run: ./build/setup.sh bbb-mkclean
-      - run: ./build/setup.sh bbb-pads
-      - run: ./build/setup.sh bbb-playback
-      - run: ./build/setup.sh bbb-playback-notes
-      - run: ./build/setup.sh bbb-playback-podcast
-      - run: ./build/setup.sh bbb-playback-presentation
-      - run: ./build/setup.sh bbb-playback-screenshare
-      - run: ./build/setup.sh bbb-record-core
-      - run: ./build/setup.sh bbb-web
-      - run: ./build/setup.sh bbb-webrtc-sfu
-      - run: ./build/setup.sh bigbluebutton
-      - run: tar cvf artifacts.tar artifacts/
+      # - run: ./build/setup.sh bbb-apps-akka
+      # - run: ./build/setup.sh bbb-config
+      # - run: ./build/setup.sh bbb-etherpad
+      # - run: ./build/setup.sh bbb-freeswitch-core
+      # - run: ./build/setup.sh bbb-freeswitch-sounds
+      # - run: ./build/setup.sh bbb-fsesl-akka
+      # - run: ./build/setup.sh bbb-html5
+      # - run: ./build/setup.sh bbb-learning-dashboard
+      # - run: ./build/setup.sh bbb-libreoffice-docker
+      # - run: ./build/setup.sh bbb-mkclean
+      # - run: ./build/setup.sh bbb-pads
+      # - run: ./build/setup.sh bbb-playback
+      # - run: ./build/setup.sh bbb-playback-notes
+      # - run: ./build/setup.sh bbb-playback-podcast
+      # - run: ./build/setup.sh bbb-playback-presentation
+      # - run: ./build/setup.sh bbb-playback-screenshare
+      # - run: ./build/setup.sh bbb-record-core
+      # - run: ./build/setup.sh bbb-web
+      # - run: ./build/setup.sh bbb-webrtc-sfu
+      # - run: ./build/setup.sh bigbluebutton
+      # - run: tar cvf artifacts.tar artifacts/
       # - name: Archive packages
       #   uses: actions/upload-artifact@v3
       #   with:
       #     name: artifacts.tar
       #     path: |
       #       artifacts.tar
-      # - name: Fake package build
-      #   run: |
-      #     sudo sh -c '
-      #     echo "Faking a package build (to speed up installation test)"
-      #     cd /
-      #     wget -q "http://ci.bbbvm.imdt.com.br/artifacts.tar"
-      #     tar xf artifacts.tar
-      #     '
+      - name: Fake package build
+        run: |
+          sudo sh -c '
+          echo "Faking a package build (to speed up installation test)"
+          cd /
+          wget -q "http://ci.bbbvm.imdt.com.br/artifacts.tar"
+          tar xf artifacts.tar
+          '
       - name: Generate CA
         run: |
           sudo sh -c '
@@ -121,26 +121,17 @@ jobs:
             '
       - name: Install test dependencies
         working-directory: ./bigbluebutton-tests/playwright
-        # with:
-        #   node-version:
         run: |
-          sudo sh -c '
-          export NODE_EXTRA_CA_CERTS="/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt"
           npm ci
           npx playwright install --with-deps
-          export ACTIONS_RUNNER_DEBUG="true"
-          '
       - name: Run tests
         working-directory: ./bigbluebutton-tests/playwright
         env:
-          BBB_URL: "https://bbb-ci.test/bigbluebutton/api"
-          BBB_SECRET: "bbbci"
-        run: |
-          echo "== here"
-          export TESTING_VAR="alright"
-          echo $NODE_EXTRA_CA_CERTS
-          echo $TESTING_VAR
-          npm run test-ci_WIP
+          NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt
+          ACTIONS_RUNNER_DEBUG: true
+          BBB_URL: https://bbb-ci.test/bigbluebutton/api
+          BBB_SECRET: bbbci
+        run: npm run test-ci_WIP
       - if: always()
         uses: actions/upload-artifact@v3
         with:
