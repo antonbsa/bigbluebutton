@@ -135,7 +135,12 @@ jobs:
         env:
           BBB_URL: "https://bbb-ci.test/bigbluebutton/api"
           BBB_SECRET: "bbbci"
-        run: npm run test-ci_WIP
+        run: |
+          echo "== here"
+          export TESTING_VAR="alright"
+          echo $NODE_EXTRA_CA_CERTS
+          echo $TESTING_VAR
+          npm run test-ci_WIP
       - if: always()
         uses: actions/upload-artifact@v3
         with:
