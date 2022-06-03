@@ -123,7 +123,7 @@ jobs:
         working-directory: ./bigbluebutton-tests/playwright
         run: |
           sudo sh -c '
-          npm ci
+          npm install
           npx playwright install-deps
           npx playwright install
           '
