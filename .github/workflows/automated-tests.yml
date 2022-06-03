@@ -121,11 +121,13 @@ jobs:
             '
       - name: Install test dependencies
         working-directory: ./bigbluebutton-tests/playwright
+        # with:
+        #   node-version:
         run: |
-          sh -c '
+          sudo sh -c '
+          export NODE_EXTRA_CA_CERTS="/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt"
           npm ci
           npx playwright install --with-deps
-          export NODE_EXTRA_CA_CERTS="/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt"
           export ACTIONS_RUNNER_DEBUG="true"
           '
       - name: Run tests
