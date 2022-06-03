@@ -134,7 +134,7 @@ jobs:
           ACTIONS_RUNNER_DEBUG: true
           BBB_URL: https://bbb-ci.test/bigbluebutton/api
           BBB_SECRET: bbbci
-        run: npm run test-ci_WIP
+        run: npm run test-ci
       - if: always()
         uses: actions/upload-artifact@v3
         with:
