@@ -11,21 +11,32 @@ jobs:
   testing-stuff:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-      - name: Installing test dependencies
-        working-directory: ./bigbluebutton-tests/playwright
-        run: |
-          npm install
-          npx playwright install
-          npx playwright install-deps
-          export NODE_EXTRA_CA_CERTS="/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt"
-          export ACTIONS_RUNNER_DEBUG="true"
-      - name: Run tests
-        working-directory: ./bigbluebutton-tests/playwright
-        env:
-          BBB_URL: "https://dev25.bigbluebutton.org/bigbluebutton/api"
-          BBB_SECRET: "zPRyjPtHOoDcM75jFy2k1oeQXNEJCt0BEMdKjFZKo"
-        run: npm test audio -- --project=chromium
+    - name: PR Comment
+      uses: actions/github-script@v2
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          github.issues.createComment({
+            issue_number: ${{ github.event.number }},
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: 'Testing a comment!'
+          })
+      # - uses: actions/checkout@v2
+      # - name: Installing test dependencies
+      #   working-directory: ./bigbluebutton-tests/playwright
+      #   run: |
+      #     npm install
+      #     npx playwright install
+      #     npx playwright install-deps
+      #     export NODE_EXTRA_CA_CERTS="/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt"
+      #     export ACTIONS_RUNNER_DEBUG="true"
+      # - name: Run tests
+      #   working-directory: ./bigbluebutton-tests/playwright
+      #   env:
+      #     BBB_URL: "https://dev25.bigbluebutton.org/bigbluebutton/api"
+      #     BBB_SECRET: "zPRyjPtHOoDcM75jFy2k1oeQXNEJCt0BEMdKjFZKo"
+      #   run: npm test audio -- --project=chromium
       # - name: Forced failure
       #   run: |
       #     sudo sh -c '
