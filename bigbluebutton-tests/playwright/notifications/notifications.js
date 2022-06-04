@@ -12,6 +12,7 @@ class Notifications extends MultiUsers {
   }
 
   async saveSettingsNotification() {
+    await util.waitAndClearDefaultPresentationNotification(this.modPage);
     await openSettings(this.modPage);
     await util.saveSettings(this.modPage);
     await util.checkNotificationText(this.modPage, e.savedSettingsToast);

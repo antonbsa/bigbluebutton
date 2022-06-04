@@ -4,7 +4,7 @@ const e = require('../core/elements');
 const utilPolling = require('../polling/util');
 const utilScreenShare = require('../screenshare/util');
 const utilPresentation = require('../presentation/util');
-const { UPLOAD_PDF_WAIT_TIME, ELEMENT_WAIT_LONGER_TIME } = require('../core/constants');
+const { UPLOAD_PDF_WAIT_TIME } = require('../core/constants');
 
 class PresenterNotifications extends MultiUsers {
   constructor(browser, context) {
