@@ -10,6 +10,7 @@ const iPhone11 = devices['iPhone 11'];
 test.describe.parallel('User', () => {
   test.describe.parallel('Actions @ci', () => {
     test('Raise and lower Hand Toast', async ({ browser, context, page }) => {
+      test.fixme(process.env.CI === 'true');
       const multiusers = new MultiUsers(browser, context);
       await multiusers.initPages(page);
       await multiusers.raiseAndLowerHand();
