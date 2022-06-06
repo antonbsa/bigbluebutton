@@ -45,7 +45,8 @@ jobs:
         id: download
         with:
           name: settings-file
-      - id: get-comment-body
+      - name: Get comment body
+        id: get-comment-body
         run: |
           body="$(cat bigbluebutton-tests/playwright/.env.template)"
       - name: Find Comment
