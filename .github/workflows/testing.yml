@@ -40,7 +40,6 @@ jobs:
             repo: context.repo.repo,
             comment_id: ${{ steps.fc.outputs.comment-id }}
           })
-      run: echo "found"
     - name: PR Comment
       uses: peter-evans/create-or-update-comment@v2
       with:
