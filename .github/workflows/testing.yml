@@ -77,5 +77,4 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Test:
-            ${{ steps.get-comment-body.outputs.body }}
+            Test link: ${{ steps.html_preview.outputs.url }}
