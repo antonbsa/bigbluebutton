@@ -72,4 +72,5 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Test link [clicking here](${{ steps.html_preview.outputs.url }})
+            Test link [clicking here](${{ steps.html_preview.outputs.url }})\n
+            run link: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
