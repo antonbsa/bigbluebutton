@@ -36,12 +36,8 @@ jobs:
       - name: Upload settings file
         uses: actions/upload-artifact@v3
         with:
-          name: settings-file
-          path: bigbluebutton-tests/playwright/.env.template
-      - uses: actions/download-artifact@v3
-        id: download
-        with:
-          name: settings-file
+          name: tests-report
+          path: bigbluebutton-tests/playwright/playwright-report
       - name: Get comment body
         id: get-comment-body
         run: |
@@ -50,7 +46,6 @@ jobs:
           body="${body//$'\n'/'%0A'}"
           body="${body//$'\r'/'%0D'}"
           echo "::set-output name=body::$body"
-
       - name: Find Comment
         uses: peter-evans/find-comment@v2
         id: fc
@@ -77,4 +72,4 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Test link: ${{ steps.html_preview.outputs.url }}
+            Test link [clicking here](${{ steps.html_preview.outputs.url }})
