@@ -10,18 +10,25 @@ on:
 jobs:
   testing-stuff:
     runs-on: ubuntu-20.04
+    permissions:
+      issues: write
     steps:
-    - name: PR Comment
-      uses: actions/github-script@v2
+    - name: Upload settings file
+      uses: actions/upload-artifact@v3
       with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
-        script: |
-          github.issues.createComment({
-            issue_number: ${{ github.event.number }},
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: 'Testing a comment!'
-          })
+        name: settings-file
+        path: bigbluebutton-tests/playwright/playwright.config.js
+    # - name: HTML Preview
+    #   id: html_preview
+    #   uses: pavi2410/html-preview-action@v2
+    #   with:
+    #     html_file: 'index.html'
+    - name: PR Comment
+      uses: peter-evans/create-or-update-comment@v2
+      with:
+        issue-number: ${{ github.event.issue.number }}
+        body: |
+          first test comment
       # - uses: actions/checkout@v2
       # - name: Installing test dependencies
       #   working-directory: ./bigbluebutton-tests/playwright
@@ -33,9 +40,6 @@ jobs:
       #     export ACTIONS_RUNNER_DEBUG="true"
       # - name: Run tests
       #   working-directory: ./bigbluebutton-tests/playwright
-      #   env:
-      #     BBB_URL: "https://dev25.bigbluebutton.org/bigbluebutton/api"
-      #     BBB_SECRET: "zPRyjPtHOoDcM75jFy2k1oeQXNEJCt0BEMdKjFZKo"
       #   run: npm test audio -- --project=chromium
       # - name: Forced failure
       #   run: |
