@@ -3,7 +3,10 @@ require('dotenv').config();
 const config = {
   workers: 1,
   timeout: 3 * 60 * 1000,
-  reporter: [['list']],
+  reporter: [
+    ['list'],
+    ['html', { open: 'never' }],
+  ],
   use: {
     headless: true,
   },
