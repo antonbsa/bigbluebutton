@@ -8,7 +8,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
-  testing-stuff:
+  test:
     runs-on: ubuntu-20.04
     permissions:
       pull-requests: write
@@ -36,43 +36,43 @@ jobs:
       #   with:
       #     name: dale
       #     path: bigbluebutton-tests/playwright/nao-existe.config.js
-    - name: Upload settings file
-      uses: actions/upload-artifact@v3
-      with:
-        name: settings-file
-        path: bigbluebutton-tests/playwright/.env.template
-    - uses: actions/download-artifact@v3
-      id: download
-      with:
-        name: settings-file
-    - name: Find Comment
-      uses: peter-evans/find-comment@v2
-      id: fc
-      with:
-        issue-number: ${{ github.event.pull_request.number }}
-        comment-author: 'github-actions[bot]'
-        # body-includes: Build output
-    - if: steps.fc.outputs.comment-id != ''
-      uses: actions/github-script@v6
-      with:
-        script: |
-          github.rest.issues.deleteComment({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            comment_id: ${{ steps.fc.outputs.comment-id }}
-          })
-    - id: get-comment-body
-      run: |
-        body="$(cat settings-file)"
-    - name: PR Comment
-      uses: peter-evans/create-or-update-comment@v2
-      with:
-        issue-number: ${{ github.event.pull_request.number }}
-        body: |
-          Test:
-          ${{ steps.get-comment-body.outputs.body }}
-    # - name: HTML Preview
-    #   id: html_preview
-    #   uses: pavi2410/html-preview-action@v2
-    #   with:
-    #     html_file: 'index.html'
+      - name: Upload settings file
+        uses: actions/upload-artifact@v3
+        with:
+          name: settings-file
+          path: bigbluebutton-tests/playwright/.env.template
+      - uses: actions/download-artifact@v3
+        id: download
+        with:
+          name: settings-file
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          # body-includes: Build output
+      - if: steps.fc.outputs.comment-id != ''
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.deleteComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: ${{ steps.fc.outputs.comment-id }}
+            })
+      - id: get-comment-body
+        run: |
+          body="$(cat settings-file)"
+      - name: PR Comment
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Test:
+            ${{ steps.get-comment-body.outputs.body }}
+      # - name: HTML Preview
+      #   id: html_preview
+      #   uses: pavi2410/html-preview-action@v2
+      #   with:
+      #     html_file: 'index.html'
