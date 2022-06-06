@@ -14,28 +14,25 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v2
-      # - name: Installing test dependencies
-      #   working-directory: ./bigbluebutton-tests/playwright
-      #   run: |
-      #     npm install
-      #     npx playwright install
-      #     npx playwright install-deps
-      #     export NODE_EXTRA_CA_CERTS="/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt"
-      #     export ACTIONS_RUNNER_DEBUG="true"
-      # - name: Run tests
-      #   working-directory: ./bigbluebutton-tests/playwright
-      #   run: npm test audio -- --project=chromium
-      # - name: Forced failure
-      #   run: |
-      #     sudo sh -c '
-      #     echo "failing..."
-      #     exit 1
-      #     '
-      # - if: always()
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: dale
-      #     path: bigbluebutton-tests/playwright/nao-existe.config.js
+      - name: Installing test dependencies
+        working-directory: ./bigbluebutton-tests/playwright
+        run: |
+          npm install
+          npx playwright install
+          npx playwright install-deps
+          export NODE_EXTRA_CA_CERTS="/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt"
+          export ACTIONS_RUNNER_DEBUG="true"
+      - name: Run tests
+        env:
+          BBB_URL: https://dev25.bigbluebutton.org/bigbluebutton/api
+          BBB_SECRET: zPRyjPtHOoDcM75jFy2k1oeQXNEJCt0BEMdKjFZKo
+        working-directory: ./bigbluebutton-tests/playwright
+        run: npm test audio -- --project=chromium
+      - if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: dale
+          path: bigbluebutton-tests/playwright/nao-existe.config.js
       - name: Upload settings file
         uses: actions/upload-artifact@v3
         with:
@@ -70,6 +67,11 @@ jobs:
               repo: context.repo.repo,
               comment_id: ${{ steps.fc.outputs.comment-id }}
             })
+      - name: HTML Preview
+        id: html_preview
+        uses: pavi2410/html-preview-action@v2
+        with:
+          html_file: bigbluebutton-tests/playwright/playwright-report/index.html
       - name: PR Comment
         uses: peter-evans/create-or-update-comment@v2
         with:
@@ -77,8 +79,3 @@ jobs:
           body: |
             Test:
             ${{ steps.get-comment-body.outputs.body }}
-      # - name: HTML Preview
-      #   id: html_preview
-      #   uses: pavi2410/html-preview-action@v2
-      #   with:
-      #     html_file: 'index.html'
