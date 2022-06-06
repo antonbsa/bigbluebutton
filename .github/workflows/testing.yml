@@ -45,6 +45,9 @@ jobs:
         id: download
         with:
           name: settings-file
+      - id: get-comment-body
+        run: |
+          body="$(cat bigbluebutton-tests/playwright/.env.template)"
       - name: Find Comment
         uses: peter-evans/find-comment@v2
         id: fc
@@ -61,9 +64,6 @@ jobs:
               repo: context.repo.repo,
               comment_id: ${{ steps.fc.outputs.comment-id }}
             })
-      - id: get-comment-body
-        run: |
-          body="$(cat settings-file)"
       - name: PR Comment
         uses: peter-evans/create-or-update-comment@v2
         with:
