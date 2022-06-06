@@ -11,7 +11,7 @@ jobs:
   testing-stuff:
     runs-on: ubuntu-20.04
     permissions:
-      issues: write
+      pull-requests: write
     steps:
     - name: Upload settings file
       uses: actions/upload-artifact@v3
