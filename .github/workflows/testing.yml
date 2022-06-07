@@ -69,3 +69,19 @@ jobs:
           body: |
             Test link [clicking here](${{ steps.html_preview.outputs.url }})
             Check the action test reports [clicking here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+  build-output-reporter:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+    - uses: actions/download-artifact@v3
+      with:
+        name: tests-report
+        path: bigbluebutton-tests/playwright/playwright-report
+    - name: deploy
+      uses: ./tests-report
+      with:
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        remote_url: ${{ github.server_url }}/${{ github.repository }}/reported-page/${{ github.event.pull_request.number }}
