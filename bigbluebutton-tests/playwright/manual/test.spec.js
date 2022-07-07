@@ -8,7 +8,7 @@ test.describe.parallel('Manual', () => {
     // manual.initPages() :: base function with joins with 1 moderator and 1 attendee
     // manual.initModPage() // manual.initModPage2() :: joins with mod1 and/or mod2
     // manual.initUserPage() // manual.initUserPage2() :: joins with user1 and/or user2
-    await manual.initModPage(page);
+    // await manual.initModPage(page);
     await manual.manualTest();
   });
 });
