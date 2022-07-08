@@ -12,6 +12,11 @@ const config = {
   ],
   use: {
     headless: true,
+    trace: DEBUG_MODE ? 'on'
+      : CI ? 'retain-on-failure'
+      : 'off',
+    screenshot: 'on',
+    video: 'on',
   },
   projects: [
     {
@@ -57,10 +62,5 @@ const config = {
 };
 
 if (CI) config.retries = 1;
-
-if (CI || DEBUG_MODE) {
-  config.use.screenshot = 'only-on-failure';
-  config.use.trace = 'retain-on-failure';
-}
 
 module.exports = config;

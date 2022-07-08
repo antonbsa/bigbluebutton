@@ -22,7 +22,7 @@ async function createMeeting(params, customParameter) {
     + `&allowStartStopRecording=true&autoStartRecording=false&welcome=${params.welcome}`;
   const apicall = `create${query}${params.secret}`;
   const checksum = sha1(apicall);
-  const url = `${params.server}/create?${query}&checksum=${checksum}`;
+  const url = `${params.server}/api/create?${query}&checksum=${checksum}`;
   await axios.get(url, { adapter: http });
   return meetingID;
 }
@@ -33,7 +33,7 @@ function getJoinURL(meetingID, params, moderator, customParameter) {
     : `fullName=${params.fullName}&meetingID=${meetingID}&password=${pw}`;
   const apicall = `join${query}${params.secret}`;
   const checksum = sha1(apicall);
-  return `${params.server}/join?${query}&checksum=${checksum}`;
+  return `${params.server}/api/join?${query}&checksum=${checksum}`;
 }
 
 function sleep(time) {
