@@ -49,7 +49,11 @@ function createMeetingPromise(params, customParameter) {
 
 async function createMeeting(params, customParameter) {
   const promise = createMeetingPromise(params, customParameter);
-  const response = await promise.then(response => xml2js.parseStringPromise(response.data));
+  const { data } = await promise;
+  console.log('previous data value::');
+  console.log({ data });
+  const response = await promise.then(response => xml2js.parseStringPromise(response.data.replace("\ufeff", "")));
+  console.log({ response })
   return response.response.meetingID[0];
 }
 
