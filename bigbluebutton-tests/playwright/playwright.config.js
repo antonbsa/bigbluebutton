@@ -7,14 +7,15 @@ const config = {
   workers: 2,
   timeout: 3 * 60 * 1000,
   reporter: [
-    [CI ? 'github' : 'list'],
+    // [CI ? 'github' : 'list'],
+    ['list'],
     ['html', { open: 'never' }],
   ],
-  forbidOnly: CI,
+  // forbidOnly: CI,
   use: {
     headless: true,
     trace: DEBUG_MODE ? 'on'
-      : CI ? 'retain-on-failure'
+      // : CI ? 'retain-on-failure'
       : 'off',
     screenshot: 'on',
     video: 'on',
@@ -62,6 +63,6 @@ const config = {
   ],
 };
 
-if (CI) config.retries = 1;
+// if (CI) config.retries = 1;
 
 module.exports = config;

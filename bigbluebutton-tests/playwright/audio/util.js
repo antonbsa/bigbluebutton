@@ -2,14 +2,14 @@ const { expect } = require('@playwright/test');
 const e = require('../core/elements');
 const { ELEMENT_WAIT_LONGER_TIME } = require('../core/constants');
 
-async function connectMicrophone(testPage) {
+async function connectMicrophone({ testPage, isFirstTestRun = true }) {
   const {
     autoJoinAudioModal,
     skipEchoTest,
     skipEchoTestOnJoin,
   } = testPage.settings;
 
-  if (!autoJoinAudioModal) await testPage.waitAndClick(e.joinAudio);
+  if (!autoJoinAudioModal && isFirstTestRun || !isFirstTestRun) await testPage.waitAndClick(e.joinAudio);
   await testPage.waitAndClick(e.microphoneButton);
   const shouldSkipEchoTest = skipEchoTest || skipEchoTestOnJoin;
   if (!shouldSkipEchoTest) {

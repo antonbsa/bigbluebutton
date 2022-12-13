@@ -9,10 +9,24 @@ const { checkElement, checkElementLengthEqualTo } = require('./util');
 const { generateSettingsData, getSettings } = require('./settings');
 
 class Page {
-  constructor(browser, page) {
+  constructor(browser, context, page) {
     this.browser = browser;
+    this.context = context;
     this.page = page;
     this.initParameters = Object.assign({}, parameters);
+  }
+
+  async isMuted() {
+    return this.checkElement(e.unmuteMicButton);
+  }
+
+  async isMicrophoneConnected() {
+    return this.checkElement(e.audioDropdownMenu)
+      && (await this.checkElement(e.muteMicButton) || await this.checkElement(e.unmuteMicButton));
+  }
+
+  async isAudioModalOpened() {
+    return this.checkElement(e.audioModal);
   }
 
   async bringToFront() {
@@ -58,7 +72,7 @@ class Page {
     }
   }
 
-  async handleNewTab(selector, context){
+  async handleNewTab(selector, context) {
     const [newPage] = await Promise.all([
       context.waitForEvent('page'),
       this.waitAndClick(selector),
@@ -116,7 +130,7 @@ class Page {
   }
 
   async getCopiedText(context) {
-    await context.grantPermissions(['clipboard-write', 'clipboard-read'], { origin: process.env.BBB_URL});
+    await context.grantPermissions(['clipboard-write', 'clipboard-read'], { origin: process.env.BBB_URL });
     return this.page.evaluate(async () => navigator.clipboard.readText());
   }
 
@@ -221,7 +235,7 @@ class Page {
   }
 
   async hasValue(selector, value) {
-    const locator  = await this.page.locator(selector);
+    const locator = await this.page.locator(selector);
     await expect(locator).toHaveValue(value);
   }
 

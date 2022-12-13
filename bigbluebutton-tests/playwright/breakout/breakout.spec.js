@@ -39,7 +39,7 @@ test.describe.parallel('Breakout', () => {
       const create = new Create(browser, context);
       await create.initPages(page);
       await create.dragDropUserInRoom();
-    });    
+    });
   });
 
   test.describe.parallel('After creating', () => {
