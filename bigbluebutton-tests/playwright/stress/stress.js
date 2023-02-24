@@ -4,7 +4,8 @@ const e = require('../core/elements');
 const c = require('../core/constants');
 const parameters = require('../core/parameters');
 const { checkIsPresenter } = require('../user/util');
-const { createMeeting } = require('../core/helpers');
+const { createMeeting, sleep } = require('../core/helpers');
+const { uploadSinglePresentation } = require('../presentation/util');
 
 class Stress {
   constructor(browser, context, page) {
@@ -159,6 +160,74 @@ class Stress {
         await currentPage.page.close();
       })
     }
+  }
+
+  async occasionalNpe() {
+    const MEETINGS_COUNT = 12;
+    const PARTICIPANTS_COUNT = 5;
+    this.meetingPages = [];
+    for (let i = 1; i <= MEETINGS_COUNT; i++) {
+      const meetingId = await createMeeting(parameters)
+      console.log(`meeting ${i} (${meetingId}) created`)
+      const newModPage = await this.getNewPageTab();
+      const modPage = new Page(this.browser, newModPage);
+      await modPage.init(true, true, { fullName: 'Moderator', meetingId })
+      console.log('joining users')
+      this.meetingPages.push({
+        meetingId,
+        modPage,
+        pages: []
+      })
+      for (let j = 1; j <= PARTICIPANTS_COUNT; j++) {
+        const userName = `User-${j}`;
+        const newPage = await this.getNewPageTab();
+        const userPage = new Page(this.browser, newPage);
+        await userPage.init(false, true, { fullName: userName, meetingId });
+        console.log(`meeting ${i}: ${userName} joined`);
+        const meetingIndex = this.meetingPages.findIndex(obj => obj.meetingId === meetingId)
+        this.meetingPages[meetingIndex].pages.push(userPage)
+      }
+      console.log(`= all users for meeting ${i} joined`)
+      console.log(`Mod in meeting ${i} is uploading a new presentation`)
+      await uploadSinglePresentation(modPage, e.questionSlideFileName)
+      console.log('presentation uploaded')
+    }
+    console.log('== actions done. 10 mins left until to test')
+
+    setInterval(async () => {
+      await Promise.all(this.meetingPages.reduce((ac, current) => {
+        return ac.concat(...current.pages)
+      }, []).map(async userPage => {
+        await this.sendMessage(userPage)
+      }))
+      console.log('All users just sent a message in the chat')
+      console.log('= Leaving meetings with a user')
+      await this.leaveAndRejoinUser(PARTICIPANTS_COUNT - 1)
+      console.log('All users has rejoined in the meetings')
+    }, 30000) // 30 secs
+    await sleep(600000) // 10 mins
+  }
+
+  async sendMessage(page) {
+    await page.page.fill(e.chatBox, "I'm online, baby")
+    await page.waitAndClick(e.sendButton)
+  }
+
+  async leaveAndRejoinUser(expectedUsersAfterLogout) {
+    await Promise.all(this.meetingPages.map(async meetingUserPages => {
+      const { modPage, pages } = meetingUserPages;
+      const lastPage = pages.pop();
+      await lastPage.logoutFromMeeting();
+      await modPage.waitUntilHaveCountSelector(e.userListItem, expectedUsersAfterLogout, 0)
+    }))
+    await Promise.all(this.meetingPages.map(async meetingUserPages => {
+      const { meetingId, modPage, pages } = meetingUserPages
+      const { browser } = modPage
+      const newPageTab = await browser.newPage();
+      const newPage = new Page(browser, newPageTab);
+      await newPage.init(false, true, { fullName: 'New-user', meetingId })
+      pages.push(newPage)
+    }))
   }
 }
 
