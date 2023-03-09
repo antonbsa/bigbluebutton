@@ -11,6 +11,7 @@ To test build the docs locally you can either use `yarn` or `npm`.
 $ yarn install  # install docusaurus and dependencies
 $ ./build.sh  # add all versions to build
 $ yarn start  # start local dev server
+hey ho
 ```
 
 The script `build.sh` goes through all branches of the repository and adds all
