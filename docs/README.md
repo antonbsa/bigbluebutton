@@ -13,6 +13,8 @@ $ ./build.sh  # add all versions to build
 $ yarn start  # start local dev server
 ```
 
+new addition
+
 The script `build.sh` goes through all branches of the repository and adds all
 release branches that have a `docusaurus.config.js`-file as versions to the docs.
 Note that you can not have uncommited local changes before you run `/build.sh`,
