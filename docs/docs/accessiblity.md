@@ -14,6 +14,8 @@ The BigBlueButton HTML5 client is WCAG 2.0 AA accessible (with exceptions) and S
 Based on the scope of the project, focus has been placed on disabilities related to visual, auditory and motor impairments.
 We have designed the BigBlueButton HTML5 client to be accessible to as many users as possible regardless of any underlying disability.
 
+adding change
+
 The client follows the WCAG 2.0 color contrast guidelines for all visual elements, in addition to an aesthetically pleasing inclusive design.
 Keyboard and screen reader support has been improved, in particular for the open source NVDA screen reader. JAWS, the markets leading paid screen reader software is also compatible with the client.
 
