@@ -24,15 +24,15 @@ test.describe.serial('Chat', () => {
     await chat.sendPrivateMessage();
   });
 
-  test('Clear chat', async () => {
+  test('Clear chat @ci', async () => {
     await chat.clearChat();
   });
 
-  test.skip('Copy chat', async () => {
+  test.skip('Copy chat @ci', async () => {
     await chat.copyChat(context);
   });
 
-  test('Save chat', async ({ context }, testInfo) => {
+  test('Save chat @ci', async ({ context }, testInfo) => {
     await chat.saveChat(testInfo);
   });
   
@@ -41,7 +41,7 @@ test.describe.serial('Chat', () => {
   });
   
   // https://docs.bigbluebutton.org/2.6/release-tests.html#sending-empty-chat-message-automated
-  test('Not able to send an empty message', async () => {
+  test('Not able to send an empty message @ci', async () => {
     await chat.emptyMessage();
   });
 
@@ -50,7 +50,7 @@ test.describe.serial('Chat', () => {
     await chat.copyPastePublicMessage();
   })
 
-  test('Send emoji on public chat', async () => {
+  test('Send emoji on public chat @ci', async () => {
     await chat.sendEmoji();
   });
 
@@ -63,7 +63,7 @@ test.describe.serial('Chat', () => {
     await chat.closePrivateChat();
   });
 
-  test('Save chat with emoji', async () => {
+  test('Save chat with emoji @ci', async () => {
     await chat.emojiSaveChat();
   });
 

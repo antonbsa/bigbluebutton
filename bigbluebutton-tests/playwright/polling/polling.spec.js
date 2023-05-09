@@ -17,7 +17,7 @@ test.describe.parallel('Polling', () => {
     });
 
     // https://docs.bigbluebutton.org/2.6/release-tests.html#quick-poll-option-automated
-    test('Create quick poll - from the slide', async ({ browser, context, page }) => {
+    test('Create quick poll - from the slide @ci', async ({ browser, context, page }) => {
       const polling = new Polling(browser, context);
       await polling.initPages(page);
       await polling.quickPoll();
@@ -41,19 +41,19 @@ test.describe.parallel('Polling', () => {
       await polling.manageResponseChoices();
     });
 
-    test('Not able to start new poll without presentation', async ({ browser, context, page }) => {
+    test('Not able to start new poll without presentation @ci', async ({ browser, context, page }) => {
       const polling = new Polling(browser, context);
       await polling.initPages(page);
       await polling.notAbleStartNewPollWithoutPresentation();
     });
 
-    test('Custom input', async ({ browser, context, page }) => {
+    test('Custom input @ci', async ({ browser, context, page }) => {
       const polling = new Polling(browser, context);
       await polling.initPages(page);
       await polling.customInput();
     });
 
-    test('Allow multiple choices', async ({ browser, context, page }) => {
+    test('Allow multiple choices @ci', async ({ browser, context, page }) => {
       const polling = new Polling(browser, context);
       await polling.initPages(page);
       await polling.allowMultipleChoices();
