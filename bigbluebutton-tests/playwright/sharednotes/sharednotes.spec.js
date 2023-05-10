@@ -7,13 +7,13 @@ test.describe.parallel('Shared Notes', () => {
     await sharedNotes.initModPage(page);
     await sharedNotes.openSharedNotes();
   });
-  test('Type in shared notes @ci', async ({ browser, page, context }) => {
+  test('Type in shared notes', async ({ browser, page, context }) => {
     // https://docs.bigbluebutton.org/2.6/release-tests.html#using-shared-notes-panel
     const sharedNotes = new SharedNotes(browser, context);
     await sharedNotes.initModPage(page);
     await sharedNotes.typeInSharedNotes();
   });
-  test('Formate text in shared notes @ci', async ({ browser, page, context }) => {
+  test('Formate text in shared notes', async ({ browser, page, context }) => {
     // https://docs.bigbluebutton.org/2.6/release-tests.html#using-shared-notes-formatting-tools
     const sharedNotes = new SharedNotes(browser, context);
     await sharedNotes.initModPage(page);
