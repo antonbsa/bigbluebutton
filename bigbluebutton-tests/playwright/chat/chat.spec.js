@@ -36,7 +36,7 @@ test.describe.serial('Chat', () => {
     await chat.saveChat(testInfo);
   });
   
-  test('Verify character limit @ci', async () => {
+  test('Verify character limit', async () => {
     await chat.characterLimit();
   });
   

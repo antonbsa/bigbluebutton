@@ -139,7 +139,9 @@ test.describe.parallel('CustomParameters', () => {
   })
 
   test.describe.parallel('Presentation', () => {
-    test('Hide Presentation @ci', async ({ browser, context, page }) => {
+    // 'userdata-bbb_hide_presentation' was removed in v2.6
+    // fix to 'userdata-bbb_hide_presentation_on_join' instead
+    test.fixme('Hide Presentation', async ({ browser, context, page }) => {
       const customParam = new CustomParameters(browser, context);
       await customParam.initModPage(page, true, { customParameter: encodeCustomParams(c.hidePresentation) });
       await customParam.hidePresentation();
