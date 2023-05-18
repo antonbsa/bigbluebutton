@@ -36,7 +36,7 @@ test.describe.serial('Polling', () => {
     await polling.manageResponseChoices();
   });
 
-  test('Not able to start new poll without presentation @ci', async () => {
+  test('Not able to start new poll without presentation', async () => {
     await polling.notAbleStartNewPollWithoutPresentation();
   });
 
