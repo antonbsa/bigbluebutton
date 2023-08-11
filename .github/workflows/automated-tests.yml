@@ -609,19 +609,14 @@ jobs:
           find $HOME/.cache/ms-playwright -name libnssckbi.so -exec rm {} \; -exec ln -s /usr/lib/x86_64-linux-gnu/pkcs11/p11-kit-trust.so {} \;
           npm run test-firefox-ci
           '
-  generate-artifacts:
-    needs: install-and-run-tests
-    if: ${{ always() }}
-    runs-on: ubuntu-20.04
-    steps:
-      - if: ${{ needs.install-and-run-tests.result == 'success' }}
+      - if: always()
         uses: actions/upload-artifact@v3
         with:
           name: tests-report
           path: |
             bigbluebutton-tests/playwright/playwright-report
             bigbluebutton-tests/playwright/test-results
-      - if: ${{ needs.install-and-run-tests.result == 'failure' }}
+      - if: failure()
         name: Prepare artifacts (configs and logs)
         run: |
           sudo -i <<EOF
@@ -646,12 +641,12 @@ jobs:
           bbb-conf --zip
           ls -t /root/*.tar.gz | head -1 | xargs -I '{}' cp '{}' /home/runner/work/bigbluebutton/bigbluebutton/bbb-logs.tar.gz
           EOF
-      - if: ${{ needs.install-and-run-tests.result == 'failure' }}
+      - if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: bbb-configs
           path: configs
-      - if: ${{ needs.install-and-run-tests.result == 'failure' }}
+      - if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: bbb-logs
