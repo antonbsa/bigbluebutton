@@ -57,6 +57,7 @@ jobs:
           comment-author: 'github-actions[bot]'
           body-includes: Automated tests Summary
       - name: Set comment-id variable
+        run: echo "setting auto-comment id variable"
         env:
           COMMENT_ID: ${{ steps.fc2.outputs.comment-id }}
   build-bbb-apps-akka:
