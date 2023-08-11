@@ -652,7 +652,7 @@ jobs:
           name: bbb-logs
           path: ./bbb-logs.tar.gz
   PR-comment:
-    needs: [install-and-run-tests, generate-artifacts]
+    needs: install-and-run-tests
     if: ${{ always() }}
     runs-on: ubuntu-20.04
     permissions:
