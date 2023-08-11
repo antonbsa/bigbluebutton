@@ -704,8 +704,8 @@ jobs:
           path: ./bbb-logs.tar.gz
   outcome-comment:
     needs: [create-comment, install-and-run-tests]
-    if: ${{ always() }}
     runs-on: ubuntu-20.04
+    if: always()
     permissions:
       pull-requests: write
     steps:
