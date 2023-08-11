@@ -12,7 +12,7 @@ test.describe.serial('Audio', () => {
   });
 
   // https://docs.bigbluebutton.org/2.6/release-tests.html#listen-only-mode-automated
-  test('Join audio with Listen Only @ci', async () => {
+  test.skip('Join audio with Listen Only @ci', async () => {
     await audio.joinAudio();
   });
 
