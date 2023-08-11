@@ -43,7 +43,7 @@ jobs:
               comment_id: ${{ steps.fc.outputs.comment-id }}
             })
   build-bbb-apps-akka:
-    needs: create-comment
+    needs: check-previous-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -83,7 +83,7 @@ jobs:
           path: |
             artifacts.tar
   build-bbb-config:
-    needs: create-comment
+    needs: check-previous-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -111,7 +111,7 @@ jobs:
           name: artifacts_bbb-config.tar
           path: artifacts.tar
   build-bbb-export-annotations:
-    needs: create-comment
+    needs: check-previous-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -139,7 +139,7 @@ jobs:
           name: artifacts_bbb-export-annotations.tar
           path: artifacts.tar
   build-bbb-learning-dashboard:
-    needs: create-comment
+    needs: check-previous-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -177,7 +177,7 @@ jobs:
           name: artifacts_bbb-learning-dashboard.tar
           path: artifacts.tar
   build-bbb-playback-record:
-    needs: create-comment
+    needs: check-previous-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -211,7 +211,7 @@ jobs:
           path: |
             artifacts.tar
   build-bbb-etherpad:
-    needs: create-comment
+    needs: check-previous-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -255,7 +255,7 @@ jobs:
           path: |
             artifacts.tar
   build-bbb-bbb-web:
-    needs: create-comment
+    needs: check-previous-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -296,7 +296,7 @@ jobs:
           path: |
             artifacts.tar
   build-bbb-fsesl-akka:
-    needs: create-comment
+    needs: check-previous-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -336,7 +336,7 @@ jobs:
           path: |
             artifacts.tar
   build-bbb-html5:
-    needs: create-comment
+    needs: check-previous-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -376,7 +376,7 @@ jobs:
           path: |
             artifacts.tar
   build-bbb-freeswitch:
-    needs: create-comment
+    needs: check-previous-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -418,7 +418,7 @@ jobs:
           path: |
             artifacts.tar
   build-others:
-    needs: create-comment
+    needs: check-previous-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
