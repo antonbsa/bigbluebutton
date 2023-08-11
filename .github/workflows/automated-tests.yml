@@ -20,12 +20,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 jobs:
-  create-comment:
+  check-previous-comment:
     runs-on: ubuntu-20.04
     permissions:
       pull-requests: write
-    outputs:
-      comment_id: ${{ steps.fc2.outputs.comment-id }}
     steps:
       - name: Find Comment
         uses: peter-evans/find-comment@v2
@@ -44,20 +42,6 @@ jobs:
               repo: context.repo.repo,
               comment_id: ${{ steps.fc.outputs.comment-id }}
             })
-      - name: Create initial comment
-        uses: peter-evans/create-or-update-comment@v2
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            <h1> Automated tests Summary </h1>
-            <h3><strong>:construction:</strong> Building process has just started </h3>
-      - name: Find Comment
-        uses: peter-evans/find-comment@v2
-        id: fc2
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Automated tests Summary
   build-bbb-apps-akka:
     needs: create-comment
     runs-on: ubuntu-20.04
@@ -709,23 +693,19 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - name: Update comment - passing tests
+      - name: Passing tests comment
         if: ${{ needs.install-and-run-tests.result == 'success' }}
         uses: peter-evans/create-or-update-comment@v2
         with:
-          comment-id: ${{ needs.create-comment.outputs.comment_id }}
           issue-number: ${{ github.event.pull_request.number }}
-          edit-mode: replace
           body: |
-            <h1> Automated tests Summary </h1>
+            <h1>Automated tests Summary</h1>
             <h3><strong>:white_check_mark:</strong> All the CI tests have passed! </h3>
-      - name: Update comment - failing tests
+      - name: Failing tests comment
         if: ${{ needs.install-and-run-tests.result == 'failure' }}
         uses: peter-evans/create-or-update-comment@v2
         with:
-          comment-id: ${{ needs.create-comment.outputs.comment_id }}
           issue-number: ${{ github.event.pull_request.number }}
-          edit-mode: replace
           body: |
             <h1> Automated tests Summary </h1>
             <h3><strong>:rotating_light:</strong> There are some failed tests </h3>
