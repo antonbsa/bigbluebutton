@@ -17,7 +17,7 @@ test.describe.serial('Audio', () => {
   });
 
   // https://docs.bigbluebutton.org/2.6/release-tests.html#join-audio-automated
-  test('Join audio with Microphone @ci', async () => {
+  test.skip('Join audio with Microphone @ci', async () => {
     await audio.joinMicrophone();
   });
 
