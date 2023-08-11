@@ -687,7 +687,7 @@ jobs:
           name: bbb-logs
           path: ./bbb-logs.tar.gz
   outcome-comment:
-    needs: [create-comment, install-and-run-tests]
+    needs: [check-previous-comment, install-and-run-tests]
     runs-on: ubuntu-20.04
     if: always()
     permissions:
