@@ -48,7 +48,7 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             <h1> Automated tests Summary <h1>
-            <h3> **:construction:**  Building process has just started <h3>
+            <h3> <strong>:construction:</strong>  Building process has just started <h3>
       - name: Find Comment
         uses: peter-evans/find-comment@v2
         id: fc2
@@ -709,7 +709,7 @@ jobs:
           edit-mode: replace
           body: |
             <h1> Automated tests Summary <h1>
-            <h3> **:white_check_mark:**  All the CI tests have passed! <h3>
+            <h3> <strong>:white_check_mark:</strong>  All the CI tests have passed! <h3>
       - name: Update comment - failing tests
         if: ${{ needs.install-and-run-tests.result == 'failure' }}
         uses: peter-evans/create-or-update-comment@v2
@@ -719,6 +719,6 @@ jobs:
           edit-mode: replace
           body: |
             <h1> Automated tests Summary <h1>
-            <h3> **:rotating_light:**  There are some failed tests <h3>
+            <h3> <strong>:rotating_light:</strong>  There are some failed tests <h3>
             ___
             [Click here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) to check the action test reports
