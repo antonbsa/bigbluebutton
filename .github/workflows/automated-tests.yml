@@ -663,21 +663,15 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - name: Get comment body
-        id: get-comment-body
-        run: |
-          body="$(cat bigbluebutton-tests/playwright/.env.template)"
-          body="${body//'%'/'%25'}"
-          body="${body//$'\n'/'%0A'}"
-          body="${body//$'\r'/'%0D'}"
-          echo "::set-output name=body::$body"
       - name: Find Comment
         uses: peter-evans/find-comment@v2
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'test-report[bot]'
-      - if: steps.fc.outputs.comment-id != ''
+          comment-author: 'github-actions[bot]'
+          body-includes: tests
+      - name: Remove previous comment
+        if: steps.fc.outputs.comment-id != ''
         uses: actions/github-script@v6
         with:
           script: |
@@ -686,13 +680,15 @@ jobs:
               repo: context.repo.repo,
               comment_id: ${{ steps.fc.outputs.comment-id }}
             })
-      - if: ${{ needs.install-and-run-tests.result == 'success' }}
+      - name: Comment passing tests
+        if: ${{ needs.install-and-run-tests.result == 'success' }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             The tests have been passed! :white_check_mark:
-      - if: ${{ needs.install-and-run-tests.result == 'failure' }}
+      - name: Comment failing tests
+        if: ${{ needs.install-and-run-tests.result == 'failure' }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           issue-number: ${{ github.event.pull_request.number }}
