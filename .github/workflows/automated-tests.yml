@@ -47,8 +47,8 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            <h1> Automated tests Summary <h1>
-            <h3> <strong>:construction:</strong>  Building process has just started <h3>
+            <h1> Automated tests Summary </h1>
+            <h3><strong>:construction:</strong> Building process has just started </h3>
       - name: Find Comment
         uses: peter-evans/find-comment@v2
         id: fc2
@@ -61,6 +61,7 @@ jobs:
         env:
           COMMENT_ID: ${{ steps.fc2.outputs.comment-id }}
   build-bbb-apps-akka:
+    needs: create-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -100,6 +101,7 @@ jobs:
           path: |
             artifacts.tar
   build-bbb-config:
+    needs: create-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -127,6 +129,7 @@ jobs:
           name: artifacts_bbb-config.tar
           path: artifacts.tar
   build-bbb-export-annotations:
+    needs: create-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -154,6 +157,7 @@ jobs:
           name: artifacts_bbb-export-annotations.tar
           path: artifacts.tar
   build-bbb-learning-dashboard:
+    needs: create-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -191,6 +195,7 @@ jobs:
           name: artifacts_bbb-learning-dashboard.tar
           path: artifacts.tar
   build-bbb-playback-record:
+    needs: create-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -224,6 +229,7 @@ jobs:
           path: |
             artifacts.tar
   build-bbb-etherpad:
+    needs: create-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -267,6 +273,7 @@ jobs:
           path: |
             artifacts.tar
   build-bbb-bbb-web:
+    needs: create-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -307,6 +314,7 @@ jobs:
           path: |
             artifacts.tar
   build-bbb-fsesl-akka:
+    needs: create-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -346,6 +354,7 @@ jobs:
           path: |
             artifacts.tar
   build-bbb-html5:
+    needs: create-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -385,6 +394,7 @@ jobs:
           path: |
             artifacts.tar
   build-bbb-freeswitch:
+    needs: create-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -426,6 +436,7 @@ jobs:
           path: |
             artifacts.tar
   build-others:
+    needs: create-comment
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -637,9 +648,8 @@ jobs:
         run: npm run test-chromium-ci
       - name: Run Firefox tests
         working-directory: ./bigbluebutton-tests/playwright
-        if: |
-          ${{ contains(github.event.pull_request.labels.*.name, 'test Firefox')
-          || contains(github.event.pull_request.labels.*.name, 'Test Firefox') }}
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'test Firefox')
+            \|| contains(github.event.pull_request.labels.*.name, 'Test Firefox') }}
         env:
           NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt
           ACTIONS_RUNNER_DEBUG: true
@@ -708,8 +718,8 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           edit-mode: replace
           body: |
-            <h1> Automated tests Summary <h1>
-            <h3> <strong>:white_check_mark:</strong>  All the CI tests have passed! <h3>
+            <h1> Automated tests Summary </h1>
+            <h3><strong>:white_check_mark:</strong> All the CI tests have passed! </h3>
       - name: Update comment - failing tests
         if: ${{ needs.install-and-run-tests.result == 'failure' }}
         uses: peter-evans/create-or-update-comment@v2
@@ -718,7 +728,7 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           edit-mode: replace
           body: |
-            <h1> Automated tests Summary <h1>
-            <h3> <strong>:rotating_light:</strong>  There are some failed tests <h3>
+            <h1> Automated tests Summary </h1>
+            <h3><strong>:rotating_light:</strong> There are some failed tests </h3>
             ___
             [Click here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) to check the action test reports
