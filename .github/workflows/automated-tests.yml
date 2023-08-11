@@ -614,14 +614,14 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-20.04
     steps:
-      - if: always()
+      - if: ${{ needs.install-and-run-tests.result == 'success' }}
         uses: actions/upload-artifact@v3
         with:
           name: tests-report
           path: |
             bigbluebutton-tests/playwright/playwright-report
             bigbluebutton-tests/playwright/test-results
-      - if: failure()
+      - if: ${{ needs.install-and-run-tests.result == 'failure' }}
         name: Prepare artifacts (configs and logs)
         run: |
           sudo -i <<EOF
@@ -646,18 +646,19 @@ jobs:
           bbb-conf --zip
           ls -t /root/*.tar.gz | head -1 | xargs -I '{}' cp '{}' /home/runner/work/bigbluebutton/bigbluebutton/bbb-logs.tar.gz
           EOF
-      - if: failure()
+      - if: ${{ needs.install-and-run-tests.result == 'failure' }}
         uses: actions/upload-artifact@v3
         with:
           name: bbb-configs
           path: configs
-      - if: failure()
+      - if: ${{ needs.install-and-run-tests.result == 'failure' }}
         uses: actions/upload-artifact@v3
         with:
           name: bbb-logs
           path: ./bbb-logs.tar.gz
   PR-comment:
     needs: [install-and-run-tests, generate-artifacts]
+    if: ${{ always() }}
     runs-on: ubuntu-20.04
     permissions:
       pull-requests: write
