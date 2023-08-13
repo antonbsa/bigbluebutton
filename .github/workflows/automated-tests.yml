@@ -1,22 +1,22 @@
-name: 'Automated tests'
+name: "Automated tests"
 on:
   push:
     branches:
-      - 'develop'
-      - 'v2.[5-9].x-release'
-      - 'v[3-9].*.x-release'
+      - "develop"
+      - "v2.[5-9].x-release"
+      - "v[3-9].*.x-release"
     paths-ignore:
-      - 'docs/**'
-      - '**/*.md'
-      - 'bigbluebutton-html5/public/locales/*.json'
+      - "docs/**"
+      - "**/*.md"
+      - "bigbluebutton-html5/public/locales/*.json"
   pull_request:
     types: [opened, synchronize, reopened]
     paths-ignore:
-      - 'docs/**'
-      - '**/*.md'
+      - "docs/**"
+      - "**/*.md"
 permissions:
   contents: read
-concurrency: 
+concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 jobs:
@@ -30,7 +30,7 @@ jobs:
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
+          comment-author: "github-actions[bot]"
           body-includes: Automated tests Summary
       - name: Remove previous comment
         if: steps.fc.outputs.comment-id != ''
@@ -159,6 +159,8 @@ jobs:
           echo "CACHE_BBB_RELEASE_KEY=$(git log -1 --format=%H -- bigbluebutton-config/bigbluebutton-release)" >> $GITHUB_ENV
           echo "FORCE_GIT_REV=0" >> $GITHUB_ENV #used by setup.sh
           echo "FORCE_COMMIT_DATE=0" >> $GITHUB_ENV #used by setup.sh
+      - name: Force failure
+        run: exit 1
       - name: Handle cache
         id: cache-action
         uses: actions/cache@v3
@@ -462,7 +464,20 @@ jobs:
       #     mv artifacts /home/runner/work/bigbluebutton/bigbluebutton/artifacts/
       #     EOF
   install-and-run-tests:
-    needs: [build-bbb-apps-akka, build-bbb-config, build-bbb-export-annotations, build-bbb-learning-dashboard, build-bbb-playback-record, build-bbb-etherpad, build-bbb-bbb-web, build-bbb-fsesl-akka, build-bbb-html5, build-bbb-freeswitch, build-others]
+    needs:
+      [
+        build-bbb-apps-akka,
+        build-bbb-config,
+        build-bbb-export-annotations,
+        build-bbb-learning-dashboard,
+        build-bbb-playback-record,
+        build-bbb-etherpad,
+        build-bbb-bbb-web,
+        build-bbb-fsesl-akka,
+        build-bbb-html5,
+        build-bbb-freeswitch,
+        build-others,
+      ]
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout ${{ github.event.pull_request.base.ref }}
@@ -587,31 +602,31 @@ jobs:
       - name: Setup local repository
         shell: bash
         run: |
-            sudo -i <<EOF
-            set -e
-            apt install -yq dpkg-dev
-            cd /root && wget -nv http://ci.bbb.imdt.dev/cache-3rd-part-packages.tar
-            cp -r /home/runner/work/bigbluebutton/bigbluebutton/artifacts/ /artifacts/
-            cd /artifacts && tar xf /root/cache-3rd-part-packages.tar
-            cd /artifacts && dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
-            echo "deb [trusted=yes] file:/artifacts/ ./" >> /etc/apt/sources.list
-            EOF
+          sudo -i <<EOF
+          set -e
+          apt install -yq dpkg-dev
+          cd /root && wget -nv http://ci.bbb.imdt.dev/cache-3rd-part-packages.tar
+          cp -r /home/runner/work/bigbluebutton/bigbluebutton/artifacts/ /artifacts/
+          cd /artifacts && tar xf /root/cache-3rd-part-packages.tar
+          cd /artifacts && dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+          echo "deb [trusted=yes] file:/artifacts/ ./" >> /etc/apt/sources.list
+          EOF
       - name: Prepare for install
         run: |
-            sudo sh -c '
-            apt --purge -y remove apache2-bin
-            '
+          sudo sh -c '
+          apt --purge -y remove apache2-bin
+          '
       - name: Install BBB
         run: |
-            sudo -i <<EOF
-            set -e
-            cd /root/ && wget -nv https://raw.githubusercontent.com/bigbluebutton/bbb-install/v2.7.x-release/bbb-install.sh -O bbb-install.sh
-            cat bbb-install.sh | sed "s|> /etc/apt/sources.list.d/bigbluebutton.list||g" | bash -s -- -v focal-27-dev -s bbb-ci.test -j -d /certs/
-            bbb-conf --salt bbbci
-            echo "NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt" >> /usr/share/meteor/bundle/bbb-html5-with-roles.conf
-            sed -i "s/\"minify\": true,/\"minify\": false,/" /usr/share/etherpad-lite/settings.json
-            bbb-conf --restart
-            EOF
+          sudo -i <<EOF
+          set -e
+          cd /root/ && wget -nv https://raw.githubusercontent.com/bigbluebutton/bbb-install/v2.7.x-release/bbb-install.sh -O bbb-install.sh
+          cat bbb-install.sh | sed "s|> /etc/apt/sources.list.d/bigbluebutton.list||g" | bash -s -- -v focal-27-dev -s bbb-ci.test -j -d /certs/
+          bbb-conf --salt bbbci
+          echo "NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt" >> /usr/share/meteor/bundle/bbb-html5-with-roles.conf
+          sed -i "s/\"minify\": true,/\"minify\": false,/" /usr/share/etherpad-lite/settings.json
+          bbb-conf --restart
+          EOF
       - name: Install test dependencies
         working-directory: ./bigbluebutton-tests/playwright
         run: |
