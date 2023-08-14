@@ -8,8 +8,8 @@ jobs:
   get-pr-data:
     runs-on: ubuntu-latest
     outputs:
-      pr-number: ${{ steps.set-env.outputs.pr_number }}
-      workflow-id: ${{ steps.set-env.outputs.workflow-id }}
+      pr-number: ${{ steps.set-env.outputs.PR_NUMBER }}
+      workflow-id: ${{ steps.set-env.outputs.WORKFLOW_ID }}
     steps:
       - name: Download comment-data-artifacts
         uses: actions/download-artifact@v3
