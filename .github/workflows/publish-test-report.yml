@@ -1,7 +1,7 @@
 name: Publish Test Results
 on:
   workflow_run:
-    workflows: ["Automated tests"]
+    workflows: [Automated tests]
     types:
       - completed
 jobs:
@@ -20,7 +20,7 @@ jobs:
           echo "PR_NUMBER=$(cat comment-data-artifacts/pr_number)" >> $GITHUB_OUTPUT
           echo "WORKFLOW_ID=$(cat comment-data-artifacts/workflow_id)" >> $GITHUB_OUTPUT
   comment-pr:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     permissions:
       pull-requests: write
     needs: get-pr-data
