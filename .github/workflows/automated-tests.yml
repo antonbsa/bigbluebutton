@@ -717,7 +717,7 @@ jobs:
             <h1>Automated tests Summary</h1>
             <h3><strong>:white_check_mark:</strong> All the CI tests have passed! </h3>
       - name: Failing tests comment
-        if: ${{ needs.install-and-run-tests.result == 'failure' }}
+        if: ${{ needs.install-and-run-tests.result == 'failure' || needs.install-and-run-tests.result == 'skipped' }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           issue-number: ${{ github.event.pull_request.number }}
