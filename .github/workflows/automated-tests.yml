@@ -34,6 +34,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: comment-data-artifacts
+          path: comment-data-artifacts
   build-bbb-apps-akka:
     needs: save-pr-number
     runs-on: ubuntu-20.04
@@ -666,9 +667,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: comment-data-artifacts
-          path: |
-            ~/comment-data-artifacts/pr-number
-            ~/comment-data-artifacts/workflow-id
+          path: ~/comment-data-artifacts
       - if: failure()
         name: Prepare artifacts (configs and logs)
         run: |
