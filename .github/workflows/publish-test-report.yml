@@ -4,6 +4,7 @@ on:
     workflows: [Automated tests]
     types:
       - completed
+  pull_request_target:
 jobs:
   get-pr-data:
     runs-on: ubuntu-latest
