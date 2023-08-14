@@ -59,4 +59,5 @@ jobs:
             <h1> Automated tests Summary</h1>
             <h3><strong>:rotating_light:</strong> Test workflow has failed</h3>
             ___
+
             [Click here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ needs.get-pr-data.outputs.workflow-id }}) to check the action test reports
