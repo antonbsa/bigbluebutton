@@ -1,10 +1,12 @@
 name: Publish Test Results
 on:
+  pull_request_target:
   workflow_run:
     workflows: [Automated tests]
     types:
       - completed
-  pull_request_target:
+  pull_request:
+
 jobs:
   get-pr-data:
     runs-on: ubuntu-latest
