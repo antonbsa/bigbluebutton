@@ -1,7 +1,6 @@
 name: Publish Test Results
 on:
   pull_request_target:
-  pull_request:
   workflow_run:
     workflows: [Automated tests]
     types:
@@ -20,11 +19,18 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            console.log('== init')
+            console.log(context.payload)
+            console.log(context.payload.workflow_run)
+
             let allArtifacts = await github.rest.actions.listWorkflowRunArtifacts({
                owner: context.repo.owner,
                repo: context.repo.repo,
                run_id: context.payload.workflow_run.id,
             });
+            console.log('== step 2')
+            console.log(allArtifacts)
+
             let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
               return artifact.name == "comment-data-artifacts"
             })[0];
@@ -36,7 +42,6 @@ jobs:
             });
             let fs = require('fs');
             fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/pr_number.zip`, Buffer.from(download.data));
-
       - name: Unzip artifact
         run: unzip comment-data-artifacts.zip
       - name: Set env variables
