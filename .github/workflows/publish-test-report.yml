@@ -1,7 +1,5 @@
 name: Publish Test Results
 on:
-  pull_request:
-  pull_request_target:
   workflow_run:
     workflows: [Automated tests]
     types:
