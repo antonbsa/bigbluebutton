@@ -14,11 +14,33 @@ jobs:
       pr-number: ${{ steps.set-env.outputs.PR_NUMBER }}
       workflow-id: ${{ steps.set-env.outputs.WORKFLOW_ID }}
     steps:
-      - name: Download comment-data-artifacts
-        uses: actions/download-artifact@v3
+      # following code taken from
+      # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#using-data-from-the-triggering-workflow
+      - name: Download artifact
+        uses: actions/github-script@v6
         with:
-          name: comment-data-artifacts
-      - id: set-env
+          script: |
+            let allArtifacts = await github.rest.actions.listWorkflowRunArtifacts({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               run_id: context.payload.workflow_run.id,
+            });
+            let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
+              return artifact.name == "comment-data-artifacts"
+            })[0];
+            let download = await github.rest.actions.downloadArtifact({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               artifact_id: matchArtifact.id,
+               archive_format: 'zip',
+            });
+            let fs = require('fs');
+            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/pr_number.zip`, Buffer.from(download.data));
+
+      - name: Unzip artifact
+        run: unzip comment-data-artifacts.zip
+      - name: Set env variables
+        id: set-env
         run: |
           echo "PR_NUMBER=$(cat comment-data-artifacts/pr_number)" >> $GITHUB_OUTPUT
           echo "WORKFLOW_ID=$(cat comment-data-artifacts/workflow_id)" >> $GITHUB_OUTPUT
