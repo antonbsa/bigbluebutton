@@ -55,23 +55,35 @@ jobs:
       cache-files-list: bbb-export-annotations
   build-bbb-learning-dashboard:
     needs: save-pr-number
-    uses: bigbluebutton/bigbluebutton/.github/workflows/automated-tests-build-package-job.yml@v2.7.x-release
-    with:
-      build-name: bbb-learning-dashboard
-      cache-files-list: bbb-learning-dashboard
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: bigbluebutton/bigbluebutton/.github/workflows/automated-tests-build-package-job.yml@v2.7.x-release
+        with:
+          build-name: bbb-learning-dashboard
+          cache-files-list: bbb-learning-dashboard
+      - name: Force failure
+        run: exit 1
   build-bbb-playback-record:
     needs: save-pr-number
-    uses: bigbluebutton/bigbluebutton/.github/workflows/automated-tests-build-package-job.yml@v2.7.x-release
-    with:
-      build-name: bbb-playback-record
-      build-list: bbb-playback bbb-playback-notes bbb-playback-podcast bbb-playback-presentation bbb-playback-screenshare bbb-playback-video bbb-record-core
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: bigbluebutton/bigbluebutton/.github/workflows/automated-tests-build-package-job.yml@v2.7.x-release
+        with:
+          build-name: bbb-playback-record
+          build-list: bbb-playback bbb-playback-notes bbb-playback-podcast bbb-playback-presentation bbb-playback-screenshare bbb-playback-video bbb-record-core
+      - name: Force failure
+        run: exit 1
   build-bbb-etherpad:
     needs: save-pr-number
-    uses: bigbluebutton/bigbluebutton/.github/workflows/automated-tests-build-package-job.yml@v2.7.x-release
-    with:
-      build-name: bbb-etherpad
-      cache-files-list: bbb-etherpad.placeholder.sh build/packages-template/bbb-etherpad
-      cache-urls-list: https://api.github.com/repos/mconf/ep_pad_ttl/commits https://api.github.com/repos/alangecker/bbb-etherpad-plugin/commits https://api.github.com/repos/mconf/ep_redis_publisher/commits https://api.github.com/repos/alangecker/bbb-etherpad-skin/commits
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: bigbluebutton/bigbluebutton/.github/workflows/automated-tests-build-package-job.yml@v2.7.x-release
+        with:
+          build-name: bbb-etherpad
+          cache-files-list: bbb-etherpad.placeholder.sh build/packages-template/bbb-etherpad
+          cache-urls-list: https://api.github.com/repos/mconf/ep_pad_ttl/commits https://api.github.com/repos/alangecker/bbb-etherpad-plugin/commits https://api.github.com/repos/mconf/ep_redis_publisher/commits https://api.github.com/repos/alangecker/bbb-etherpad-skin/commits
+      - name: Force failure
+        run: exit 1
   build-bbb-bbb-web:
     needs: save-pr-number
     uses: bigbluebutton/bigbluebutton/.github/workflows/automated-tests-build-package-job.yml@v2.7.x-release
@@ -108,10 +120,14 @@ jobs:
       cache-files-list: bbb-webrtc-sfu.placeholder.sh bbb-webrtc-recorder.placeholder.sh build/packages-template/bbb-webrtc-sfu build/packages-template/bbb-webrtc-recorder
   build-others:
     needs: save-pr-number
-    uses: bigbluebutton/bigbluebutton/.github/workflows/automated-tests-build-package-job.yml@v2.7.x-release
-    with:
-      build-name: others
-      build-list: bbb-mkclean bbb-pads bbb-libreoffice-docker bbb-transcription-controller bigbluebutton
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: bigbluebutton/bigbluebutton/.github/workflows/automated-tests-build-package-job.yml@v2.7.x-release
+        with:
+          build-name: others
+          build-list: bbb-mkclean bbb-pads bbb-libreoffice-docker bbb-transcription-controller bigbluebutton
+      - name: Force failure
+        run: exit 1
   install-and-run-tests:
     needs:
       [
