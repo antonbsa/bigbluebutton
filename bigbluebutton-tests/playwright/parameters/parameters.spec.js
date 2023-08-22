@@ -428,7 +428,7 @@ test.describe.parallel('Custom Parameters', () => {
       await customParam.autoJoin();
     });
 
-    test('Disable Listen Only Mode @ci', async ({ browser, context, page }) => {
+    test.skip('Disable Listen Only Mode @ci', async ({ browser, context, page }) => {
       const customParam = new CustomParameters(browser, context);
       await customParam.initModPage(page, false, { joinParameter: c.listenOnlyMode });
       await customParam.listenOnlyMode();

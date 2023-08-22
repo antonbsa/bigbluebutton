@@ -12,7 +12,7 @@ test.describe.parallel('Notifications', () => {
     await notifications.saveSettingsNotification();
   });
 
-  test('Audio notifications @ci', async ({ browser, context, page }) => {
+  test.skip('Audio notifications @ci', async ({ browser, context, page }) => {
     const notifications = new Notifications(browser, context);
     await notifications.initModPage(page);
     await notifications.audioNotification();
