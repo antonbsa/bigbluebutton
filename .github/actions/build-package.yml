@@ -5,7 +5,7 @@ on:
       build-name:
         required: true
         type: string
-      build-list: 
+      build-list:
         type: string
       cache-files-list:
         type: string
