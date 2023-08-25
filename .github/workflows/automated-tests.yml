@@ -215,9 +215,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: artifacts_others.tar
-      - uses: actions/download-artifact@v3
-        with:
-          name: pr-comment-data
       - run: tar xf artifacts.tar
       - name: Extracting files .tar
         run: |
@@ -337,11 +334,6 @@ jobs:
         with:
           name: all-blob-reports
           path: blob-report
-      - if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: pr-comment-data
-          path: ~/pr-comment-data
       - if: failure()
         name: Prepare artifacts (configs and logs)
         run: |
