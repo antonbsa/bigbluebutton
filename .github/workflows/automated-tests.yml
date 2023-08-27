@@ -131,65 +131,23 @@ jobs:
           git config pull.rebase false
           git pull origin pull/${{ github.event.number }}/head:${{ github.head_ref }}
       - run: ./build/get_external_dependencies.sh
-      - name: Download artifacts_bbb-apps-akka
+      - name: Download all build artifacts
         uses: actions/download-artifact@v3
         with:
-          name: artifacts_bbb-apps-akka.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-config
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-config.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-export-annotations
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-export-annotations.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-learning-dashboard
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-learning-dashboard.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-playback-record
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-playback-record.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-etherpad
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-etherpad.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-freeswitch
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-freeswitch.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-webrtc
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-webrtc.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-web
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-web.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-fsesl-akka
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-fsesl-akka.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-html5
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-html5.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_others.tar
+          name: |
+            artifacts_bbb-apps-akka.tar
+            artifacts_bbb-config.tar
+            artifacts_bbb-export-annotations.tar
+            artifacts_bbb-learning-dashboard.tar
+            artifacts_bbb-playback-record.tar
+            artifacts_bbb-etherpad.tar
+            artifacts_bbb-freeswitch.tar
+            artifacts_bbb-webrtc.tar
+            artifacts_bbb-web.tar
+            artifacts_bbb-fsesl-akka.tar
+            artifacts_bbb-html5.tar
+            artifacts_others.tar
+      - run: ls
       - run: tar xf artifacts.tar
       - name: Extracting files .tar
         run: |
@@ -357,7 +315,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: |
-            bbb-logs
+            bbb-logs.tar.gz
             configs
       - name: Upload BBB artifacts
         uses: actions/upload-artifact@v3
