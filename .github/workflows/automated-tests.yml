@@ -70,6 +70,7 @@ jobs:
           - package: others
             build-list: bbb-mkclean bbb-pads bbb-libreoffice-docker bbb-transcription-controller bigbluebutton
     steps:
+      - uses: actions/checkout@v3
       - name: Merge branches
         uses: ./.github/actions/merge-branches
       - name: Set cache-key vars
@@ -107,6 +108,7 @@ jobs:
       matrix:
         shard: [1/8, 2/8, 3/8, 4/8, 5/8, 6/8, 7/8, 8/8]
     steps:
+      - uses: actions/checkout@v3
       - name: Merge branches
         uses: ./.github/actions/merge-branches
       - run: ./build/get_external_dependencies.sh
