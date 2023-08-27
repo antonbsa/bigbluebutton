@@ -112,9 +112,12 @@ jobs:
       - name: Merge branches
         uses: ./.github/actions/merge-branches
       - run: ./build/get_external_dependencies.sh
+      - run: echo "== here"
+      - run: ls
       - name: Download all build artifacts
         uses: actions/download-artifact@v3
         with:
+          path: artifacts.tar
           name: |
             artifacts_bbb-apps-akka.tar
             artifacts_bbb-config.tar
