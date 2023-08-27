@@ -20,123 +20,98 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 jobs:
-  build-bbb-apps-akka:
+  build-package:
     runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        package:
+          [
+            bbb-apps-akka,
+            bbb-config,
+            bbb-export-annotations,
+            bbb-learning-dashbaord,
+            bbb-playback-record,
+            bbb-etherpad,
+            bbb-web,
+            bbb-fsesl-akka,
+            bbb-html5,
+            bbb-freeswitch,
+            bbb-webrtc,
+            others,
+          ]
+        include:
+          - package: bbb-apps-akka
+            cache-files-list: akka-bbb-apps bbb-common-message
+          - package: bbb-config
+            cache-files-list: bigbluebutton-config
+          - package: bbb-export-annotations
+            cache-files-list: bbb-export-annotations
+          - package: bbb-learning-dashboard
+            cache-files-list: bbb-learning-dashboard
+          - package: bbb-playback-record
+            build-list: bbb-playback bbb-playback-notes bbb-playback-podcast bbb-playback-presentation bbb-playback-screenshare bbb-playback-video bbb-record-core
+          - package: bbb-etherpad
+            cache-files-list: bbb-etherpad.placeholder.sh build/packages-template/bbb-etherpad
+            cache-urls-list: https://api.github.com/repos/mconf/ep_pad_ttl/commits https://api.github.com/repos/alangecker/bbb-etherpad-plugin/commits https://api.github.com/repos/mconf/ep_redis_publisher/commits https://api.github.com/repos/alangecker/bbb-etherpad-skin/commits
+          - package: bbb-web
+            cache-files-list: bigbluebutton-web bbb-common-message bbb-common-web
+          - package: bbb-fsesl-akka
+            cache-files-list: akka-bbb-fsesl bbb-common-message
+          - package: bbb-html5
+            build-list: bbb-html5-nodejs bbb-html5
+            cache-files-list: bigbluebutton-html5
+          - package: bbb-freeswitch
+            build-list: bbb-freeswitch-core bbb-freeswitch-sounds
+            cache-files-list: freeswitch.placeholder.sh build/packages-template/bbb-freeswitch-core build/packages-template/bbb-freeswitch-sounds
+            cache-urls-list: http://bigbluebutton.org/downloads/sounds.tar.gz
+          - package: bbb-webrtc
+            build-list: bbb-webrtc-sfu bbb-webrtc-recorder
+            cache-files-list: bbb-webrtc-sfu.placeholder.sh bbb-webrtc-recorder.placeholder.sh build/packages-template/bbb-webrtc-sfu build/packages-template/bbb-webrtc-recorder
+          - package: others
+            build-list: bbb-mkclean bbb-pads bbb-libreoffice-docker bbb-transcription-controller bigbluebutton
     steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/build-package
+      - name: Checkout ${{ github.event.pull_request.base.ref || 'master' }}
+        uses: actions/checkout@v3
         with:
-          build-name: bbb-apps-akka
-          cache-files-list: akka-bbb-apps bbb-common-message
-  build-bbb-config:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/build-package
+          ref: ${{ github.event.pull_request.base.ref || '' }}
+          fetch-depth: 0 # Fetch all history
+      - name: Merge pr-${{ github.event.number }} into ${{ github.event.pull_request.base.ref }}
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          git config user.name "BBB Automated Tests"
+          git config user.email "tests@bigbluebutton.org"
+          git config pull.rebase false
+          git pull origin pull/${{ github.event.number }}/head:${{ github.head_ref }}
+      - name: Set cache-key vars
+        shell: bash
+        run: |
+          echo "CACHE_KEY_FILES=$(echo '${{ matrix.cache-files-list }} .gitlab-ci.yml build/deb-helper.sh' | xargs -n1 git log -1 --format=%h -- | tr '\n' '-' | sed 's/-$//')" >> $GITHUB_ENV
+          echo "CACHE_KEY_URLS=$(echo '${{ matrix.cache-urls-list }}' | xargs -r -n 1 curl -Is | grep -i 'Last-Modified' | md5sum | cut -c1-10)" >> $GITHUB_ENV
+          cat bigbluebutton-config/bigbluebutton-release >> $GITHUB_ENV
+          echo "FORCE_GIT_REV=0" >> $GITHUB_ENV #used by setup.sh
+          echo "FORCE_COMMIT_DATE=0" >> $GITHUB_ENV #used by setup.sh
+      - name: Handle cache
+        if: matrix.cache-files-list != ''
+        id: cache-action
+        uses: actions/cache@v3
         with:
-          build-name: bbb-config
-          cache-files-list: bigbluebutton-config
-  build-bbb-export-annotations:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/build-package
+          path: artifacts.tar
+          key: ${{ runner.os }}-${{ matrix.package }}-${{ env.BIGBLUEBUTTON_RELEASE }}-commits-${{ env.CACHE_KEY_FILES }}-urls-${{ env.CACHE_KEY_URLS }}
+      - if: ${{ steps.cache-action.outputs.cache-hit != 'true' }}
+        name: Generate artifacts
+        shell: bash
+        run: |
+          ./build/get_external_dependencies.sh
+          echo "${{ matrix.build-list || matrix.package }}" | xargs -n 1 ./build/setup.sh
+          tar cvf artifacts.tar artifacts/
+      - name: Archive packages
+        uses: actions/upload-artifact@v3
         with:
-          build-name: bbb-export-annotations
-          cache-files-list: bbb-export-annotations
-  build-bbb-learning-dashboard:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/build-package
-        with:
-          build-name: bbb-learning-dashboard
-          cache-files-list: bbb-learning-dashboard
-  build-bbb-playback-record:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/build-package
-        with:
-          build-name: bbb-playback-record
-          build-list: bbb-playback bbb-playback-notes bbb-playback-podcast bbb-playback-presentation bbb-playback-screenshare bbb-playback-video bbb-record-core
-  build-bbb-etherpad:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/build-package
-        with:
-          build-name: bbb-etherpad
-          cache-files-list: bbb-etherpad.placeholder.sh build/packages-template/bbb-etherpad
-          cache-urls-list: https://api.github.com/repos/mconf/ep_pad_ttl/commits https://api.github.com/repos/alangecker/bbb-etherpad-plugin/commits https://api.github.com/repos/mconf/ep_redis_publisher/commits https://api.github.com/repos/alangecker/bbb-etherpad-skin/commits
-  build-bbb-bbb-web:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/build-package
-        with:
-          build-name: bbb-web
-          cache-files-list: bigbluebutton-web bbb-common-message bbb-common-web
-  build-bbb-fsesl-akka:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/build-package
-        with:
-          build-name: bbb-fsesl-akka
-          cache-files-list: akka-bbb-fsesl bbb-common-message
-  build-bbb-html5:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/build-package
-        with:
-          build-name: bbb-html5
-          build-list: bbb-html5-nodejs bbb-html5
-          cache-files-list: bigbluebutton-html5
-  build-bbb-freeswitch:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/build-package
-        with:
-          build-name: bbb-freeswitch
-          build-list: bbb-freeswitch-core bbb-freeswitch-sounds
-          cache-files-list: freeswitch.placeholder.sh build/packages-template/bbb-freeswitch-core build/packages-template/bbb-freeswitch-sounds
-          cache-urls-list: http://bigbluebutton.org/downloads/sounds.tar.gz
-  build-bbb-webrtc:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/build-package
-        with:
-          build-name: bbb-webrtc
-          build-list: bbb-webrtc-sfu bbb-webrtc-recorder
-          cache-files-list: bbb-webrtc-sfu.placeholder.sh bbb-webrtc-recorder.placeholder.sh build/packages-template/bbb-webrtc-sfu build/packages-template/bbb-webrtc-recorder
-  build-others:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/build-package
-        with:
-          build-name: others
-          build-list: bbb-mkclean bbb-pads bbb-libreoffice-docker bbb-transcription-controller bigbluebutton
+          name: artifacts_${{ matrix.package }}.tar
+          path: artifacts.tar
   install-and-run-tests:
-    needs:
-      [
-        build-bbb-apps-akka,
-        build-bbb-config,
-        build-bbb-export-annotations,
-        build-bbb-learning-dashboard,
-        build-bbb-playback-record,
-        build-bbb-etherpad,
-        build-bbb-bbb-web,
-        build-bbb-fsesl-akka,
-        build-bbb-html5,
-        build-bbb-freeswitch,
-        build-bbb-webrtc,
-        build-others,
-      ]
+    needs: [build-package]
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -378,13 +353,26 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: |
+            bbb-logs
+            configs
+      - name: Upload BBB artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifacts
+          path: |
+            bbb-logs/
+            configs/
       - name: Install dependencies
+        working-directory: ./bigbluebutton-tests/playwright
         run: npm ci
       - name: Download blob reports from GitHub Actions Artifacts
         uses: actions/download-artifact@v3
         with:
           name: all-blob-reports
-          path: all-blob-reports
       - name: Merge into HTML Report
         run: npx playwright merge-reports --reporter html ./all-blob-reports
       - name: Upload HTML report
