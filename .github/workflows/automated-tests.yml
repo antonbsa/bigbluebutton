@@ -29,7 +29,7 @@ jobs:
             bbb-apps-akka,
             bbb-config,
             bbb-export-annotations,
-            bbb-learning-dashbaord,
+            bbb-learning-dashboard,
             bbb-playback-record,
             bbb-etherpad,
             bbb-web,
