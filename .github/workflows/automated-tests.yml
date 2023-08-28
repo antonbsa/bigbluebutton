@@ -94,7 +94,7 @@ jobs:
         run: |
           ./build/get_external_dependencies.sh
           echo "${{ matrix.build-list || matrix.package }}" | xargs -n 1 ./build/setup.sh
-          tar cvf artifacts_${{ matrix.package }}.tar artifacts/
+          tar cvf artifacts.tar artifacts_${{ matrix.package }}/
       - name: Archive packages
         uses: actions/upload-artifact@v3
         with:
