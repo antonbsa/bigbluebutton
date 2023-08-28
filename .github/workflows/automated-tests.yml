@@ -355,6 +355,7 @@ jobs:
       - name: Write PR data for auto-comment
         if: github.event_name == 'pull_request'
         run: |
+          cd
           echo '${{ github.event.number }} > ./pr-comment-data/pr_number'
           echo '${{ github.run_id }} > ./pr-comment-data/workflow_id'
       - name: Upload PR data for auto-comment
