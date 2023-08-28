@@ -343,6 +343,7 @@ jobs:
           name: all-blob-reports
           path: bigbluebutton-tests/playwright/all-blob-reports
       - name: Merge into HTML Report
+        working-directory: ./bigbluebutton-tests/playwright
         run: npx playwright merge-reports --reporter html ./all-blob-reports
       - name: Upload HTML tests report
         uses: actions/upload-artifact@v3
