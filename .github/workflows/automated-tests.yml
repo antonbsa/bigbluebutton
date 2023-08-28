@@ -284,13 +284,12 @@ jobs:
           find $HOME/.cache/ms-playwright -name libnssckbi.so -exec rm {} \; -exec ln -s /usr/lib/x86_64-linux-gnu/pkcs11/p11-kit-trust.so {} \;
           npm run test-firefox-ci -- --shard ${{ matrix.shard }}
           '
-      - run: ls -R
       - name: Upload blob report to GitHub Actions Artifacts
         if: always() && github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
           name: all-blob-reports
-          path: ./blob-report
+          path: bigbluebutton-tests/playwright/blob-report
       - if: failure()
         name: Prepare artifacts (configs and logs)
         run: |
