@@ -364,4 +364,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: pr-comment-data
-          path: ./pr-comment-data
+          path: pr-comment-data
