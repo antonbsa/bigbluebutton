@@ -334,19 +334,28 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Download Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: |
-            bbb-logs
-            configs
-      - name: Upload BBB artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: artifacts
-          path: |
-            bbb-logs/
-            configs/
+      # - name: Download logs
+      #   if: needs.install-and-run-tests.result == 'failure'
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: bbb-logs
+      # - name: Upload logs
+      #   if: needs.install-and-run-tests.result == 'failure'
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: bbb-logs
+      #     path: bbb-logs
+      # - name: Download configs
+      #   if: needs.install-and-run-tests.result == 'failure'
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: bbb-configs
+      # - name: Download configs
+      #   if: needs.install-and-run-tests.result == 'failure'
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: bbb-configs
+      #     path: bbb-configs
       - name: Install dependencies
         working-directory: ./bigbluebutton-tests/playwright
         run: npm ci
