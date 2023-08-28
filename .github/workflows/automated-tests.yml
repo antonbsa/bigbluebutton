@@ -334,28 +334,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      # - name: Download logs
-      #   if: needs.install-and-run-tests.result == 'failure'
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: bbb-logs
-      # - name: Upload logs
-      #   if: needs.install-and-run-tests.result == 'failure'
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: bbb-logs
-      #     path: bbb-logs
-      # - name: Download configs
-      #   if: needs.install-and-run-tests.result == 'failure'
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: bbb-configs
-      # - name: Download configs
-      #   if: needs.install-and-run-tests.result == 'failure'
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: bbb-configs
-      #     path: bbb-configs
       - name: Install dependencies
         working-directory: ./bigbluebutton-tests/playwright
         run: npm ci
@@ -366,11 +344,13 @@ jobs:
           path: all-blob-reports
       - name: Merge into HTML Report
         run: npx playwright merge-reports --reporter html ./all-blob-reports
-      - name: Upload HTML report
+      - name: Upload HTML tests report
         uses: actions/upload-artifact@v3
         with:
-          name: html-report
-          path: playwright-report
+          name: tests-report
+          path: |
+            bigbluebutton-tests/playwright/playwright-report
+            bigbluebutton-tests/playwright/test-results
       - name: Write PR data for auto-comment
         if: github.event_name == 'pull_request'
         run: |
