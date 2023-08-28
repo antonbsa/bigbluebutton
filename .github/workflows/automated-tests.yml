@@ -343,7 +343,6 @@ jobs:
           name: all-blob-reports
           path: bigbluebutton-tests/playwright/all-blob-reports
       - name: Merge into HTML Report
-        working-directory: ./bigbluebutton-tests/playwright
         run: npx playwright merge-reports --reporter html ./all-blob-reports
       - name: Upload HTML tests report
         uses: actions/upload-artifact@v3
@@ -353,9 +352,9 @@ jobs:
             bigbluebutton-tests/playwright/playwright-report
             bigbluebutton-tests/playwright/test-results
       - name: Write PR data for auto-comment
+        working-directory: ./
         if: github.event_name == 'pull_request'
         run: |
-          cd
           echo '${{ github.event.number }} > ./pr-comment-data/pr_number'
           echo '${{ github.run_id }} > ./pr-comment-data/workflow_id'
       - name: Upload PR data for auto-comment
