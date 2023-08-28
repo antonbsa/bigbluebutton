@@ -94,12 +94,12 @@ jobs:
         run: |
           ./build/get_external_dependencies.sh
           echo "${{ matrix.build-list || matrix.package }}" | xargs -n 1 ./build/setup.sh
-          tar cvf artifacts.tar artifacts/
+          tar cvf artifacts_${{ matrix.package }}.tar artifacts/
       - name: Archive packages
         uses: actions/upload-artifact@v3
         with:
-          name: artifacts_${{ matrix.package }}.tar
-          path: artifacts.tar
+          name: artifacts
+          path: artifacts_${{ matrix.package }}.tar
   install-and-run-tests:
     needs: [build-package]
     runs-on: ubuntu-20.04
@@ -112,66 +112,71 @@ jobs:
       - name: Merge branches
         uses: ./.github/actions/merge-branches
       - run: ./build/get_external_dependencies.sh
-      - name: Download artifacts_bbb-apps-akka
+      - name: Download all artifacts
         uses: actions/download-artifact@v3
         with:
-          name: artifacts_bbb-apps-akka.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-config
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-config.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-export-annotations
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-export-annotations.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-learning-dashboard
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-learning-dashboard.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-playback-record
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-playback-record.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-etherpad
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-etherpad.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-freeswitch
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-freeswitch.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-webrtc
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-webrtc.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-web
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-web.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-fsesl-akka
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-fsesl-akka.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts_bbb-html5
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_bbb-html5.tar
-      - run: tar xf artifacts.tar
-      - name: Download artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: artifacts_others.tar
-      - run: tar xf artifacts.tar
+          name: artifacts
+      - run: tar xvf *.tar
+      # - name: Download artifacts_bbb-apps-akka
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: artifacts_bbb-apps-akka.tar
+      # - run: tar xf artifacts.tar
+      # - name: Download artifacts_bbb-config
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: artifacts_bbb-config.tar
+      # - run: tar xf artifacts.tar
+      # - name: Download artifacts_bbb-export-annotations
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: artifacts_bbb-export-annotations.tar
+      # - run: tar xf artifacts.tar
+      # - name: Download artifacts_bbb-learning-dashboard
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: artifacts_bbb-learning-dashboard.tar
+      # - run: tar xf artifacts.tar
+      # - name: Download artifacts_bbb-playback-record
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: artifacts_bbb-playback-record.tar
+      # - run: tar xf artifacts.tar
+      # - name: Download artifacts_bbb-etherpad
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: artifacts_bbb-etherpad.tar
+      # - run: tar xf artifacts.tar
+      # - name: Download artifacts_bbb-freeswitch
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: artifacts_bbb-freeswitch.tar
+      # - run: tar xf artifacts.tar
+      # - name: Download artifacts_bbb-webrtc
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: artifacts_bbb-webrtc.tar
+      # - run: tar xf artifacts.tar
+      # - name: Download artifacts_bbb-web
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: artifacts_bbb-web.tar
+      # - run: tar xf artifacts.tar
+      # - name: Download artifacts_bbb-fsesl-akka
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: artifacts_bbb-fsesl-akka.tar
+      # - run: tar xf artifacts.tar
+      # - name: Download artifacts_bbb-html5
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: artifacts_bbb-html5.tar
+      # - run: tar xf artifacts.tar
+      # - name: Download artifacts
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: artifacts_others.tar
+      # - run: tar xf artifacts.tar
       - name: Extracting files .tar
         run: |
           set -e
@@ -342,6 +347,7 @@ jobs:
         with:
           name: all-blob-reports
           path: bigbluebutton-tests/playwright
+      - run: ls -R
       - name: Merge into HTML Report
         working-directory: ./bigbluebutton-tests/playwright
         run: npx playwright merge-reports --reporter html ./all-blob-reports
