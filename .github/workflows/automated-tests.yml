@@ -103,6 +103,11 @@ jobs:
         with:
           name: artifacts_${{ matrix.package }}.tar
           path: artifacts.tar
+      - if: failure()
+        run: |
+          mkdir -p ./pr-comment-data
+          echo "build-package" > ./pr-comment-data/failure-reason
+          echo ${{ matrix.package }} >> ./pr-comment-data/failed-builds
   install-and-run-tests:
     needs: build-package
     runs-on: ubuntu-22.04
@@ -261,6 +266,10 @@ jobs:
           sed -i "s/\"minify\": true,/\"minify\": false,/" /usr/share/etherpad-lite/settings.json
           bbb-conf --restart
           EOF
+      - if: failure()
+        run: |
+          mkdir -p ./pr-comment-data
+          echo "bbb-installation" > ./pr-comment-data/failure-reason
       - name: Install test dependencies
         working-directory: ./bigbluebutton-tests/playwright
         run: |
