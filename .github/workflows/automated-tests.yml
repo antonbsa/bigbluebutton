@@ -104,6 +104,7 @@ jobs:
           name: artifacts_${{ matrix.package }}.tar
           path: artifacts.tar
       - if: failure()
+        working-directory: ./
         run: |
           mkdir -p ./pr-comment-data
           echo "build-package" > ./pr-comment-data/failure-reason
@@ -267,6 +268,7 @@ jobs:
           bbb-conf --restart
           EOF
       - if: failure()
+        working-directory: ./
         run: |
           mkdir -p ./pr-comment-data
           echo "bbb-installation" > ./pr-comment-data/failure-reason
