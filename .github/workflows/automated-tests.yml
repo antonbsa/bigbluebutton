@@ -269,7 +269,8 @@ jobs:
           npx playwright install-deps
           npx playwright install
           '
-      - name: Run tests
+      - name: Run Chromium tests
+        id: chromium-tests
         working-directory: ./bigbluebutton-tests/playwright
         env:
           NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt
@@ -278,6 +279,7 @@ jobs:
           BBB_SECRET: bbbci
         run: npm run test-chromium-ci -- --shard ${{ matrix.shard }}
       - name: Run Firefox tests
+        id: firefox-tests
         working-directory: ./bigbluebutton-tests/playwright
         if: |
           contains(github.event.pull_request.labels.*.name, 'test Firefox') ||
@@ -293,7 +295,7 @@ jobs:
           find $HOME/.cache/ms-playwright -name libnssckbi.so -exec rm {} \; -exec ln -s /usr/lib/x86_64-linux-gnu/pkcs11/p11-kit-trust.so {} \;
           npm run test-firefox-ci -- --shard ${{ matrix.shard }}
           '
-      - if: always() && github.event_name == 'pull_request'
+      - if: always() && github.event_name == 'pull_request' && (steps.chromium-tests.conclusion != 'skipped' || steps.firefox-tests.conclusion != 'skipped')
         name: Upload blob report to GitHub Actions Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -362,14 +364,14 @@ jobs:
             bigbluebutton-tests/playwright/playwright-report
             bigbluebutton-tests/playwright/test-results
       - name: Write PR data for auto-comment
-        if: github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request'
         working-directory: ./
         run: |
           mkdir -p ./pr-comment-data
           echo ${{ github.event.number }} > ./pr-comment-data/pr_number
           echo ${{ github.run_id }} > ./pr-comment-data/workflow_id
       - name: Upload PR data for auto-comment
-        if: github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
           name: pr-comment-data
