@@ -13,6 +13,8 @@ jobs:
     outputs:
       pr-number: ${{ steps.set-env.outputs.pr-number }}
       workflow-id: ${{ steps.set-env.outputs.workflow-id }}
+      failure-reason: ${{ steps.set-env.outputs.failure-reason || '' }}
+      failed-builds: ${{ steps.set-env.outputs.failed-builds || ''}}
     steps:
       # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#using-data-from-the-triggering-workflow
       - name: Download artifact
@@ -43,6 +45,8 @@ jobs:
         run: |
           echo "pr-number=$(cat ./pr_number)" >> $GITHUB_OUTPUT
           echo "workflow-id=$(cat ./workflow_id)" >> $GITHUB_OUTPUT
+          echo "failure-reason=$(cat ./failure-reason)" >> $GITHUB_OUTPUT
+          echo "failed-builds=$(cat ./failed-builds)" >> $GITHUB_OUTPUT
   comment-pr:
     runs-on: ubuntu-latest
     permissions:
@@ -74,14 +78,38 @@ jobs:
           body: |
             <h1>Automated tests Summary</h1>
             <h3><strong>:white_check_mark:</strong> All the CI tests have passed!</h3>
-      - name: Failing tests comment
-        if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+      - name: Failing build comment
+        if: ${{ github.event.workflow_run.conclusion == 'failure' && needs.get-pr-data.outputs.failure-reason == 'build-package' }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           issue-number: ${{ needs.get-pr-data.outputs.pr-number }}
           body: |
             <h1> Automated tests Summary</h1>
-            <h3><strong>:rotating_light:</strong> Test workflow has failed</h3>
+            <h3><strong>:rotating_light:</strong> Test workflow has failed some package build process</h3>
+
+            ___
+
+            [Click here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ needs.get-pr-data.outputs.workflow-id }}) to check the action test reports
+      - name: Failing install comment
+        if: ${{ github.event.workflow_run.conclusion == 'failure' && needs.get-pr-data.outputs.failure-reason == 'bbb-installation' }}
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          issue-number: ${{ needs.get-pr-data.outputs.pr-number }}
+          body: |
+            <h1> Automated tests Summary</h1>
+            <h3><strong>:rotating_light:</strong> Test workflow has failed to install BBB</h3>
+
+            ___
+
+            [Click here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ needs.get-pr-data.outputs.workflow-id }}) to check the action test reports
+      - name: Failing tests comment
+        if: ${{ github.event.workflow_run.conclusion == 'failure' && needs.get-pr-data.outputs.failure-reason == '' }}
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          issue-number: ${{ needs.get-pr-data.outputs.pr-number }}
+          body: |
+            <h1> Automated tests Summary</h1>
+            <h3><strong>:rotating_light:</strong> There're some failed tests</h3>
 
             ___
 
