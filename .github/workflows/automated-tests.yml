@@ -109,6 +109,11 @@ jobs:
           mkdir -p ./pr-comment-data
           echo "build-package" > ./pr-comment-data/failure-reason
           echo ${{ matrix.package }} >> ./pr-comment-data/failed-builds
+      - if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: pr-comment-data
+          path: pr-comment-data
   install-and-run-tests:
     needs: build-package
     runs-on: ubuntu-22.04
