@@ -364,7 +364,7 @@ jobs:
       - name: Install dependencies
         working-directory: ./bigbluebutton-tests/playwright
         run: npm ci
-      - if: needs.install-and-run-tests.result == 'failure'
+      - if: needs.install-and-run-tests.result == 'skipped' || needs.install-and-run-tests.result == 'failure'
         id: pr-data-artifact
         uses: actions/download-artifact@v3
         with:
