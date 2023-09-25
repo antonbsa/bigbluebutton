@@ -80,15 +80,15 @@ jobs:
             <h1>Automated tests Summary</h1>
             <h3><strong>:white_check_mark:</strong> All the CI tests have passed!</h3>
       - run: |
-          for pckg in ${{ needs.get-pr-data.outputs.failed-builds }}; do echo -n "<li>$pckg</li>\n" >> ./pckg-list; done;
+          for pckg in ${{ needs.get-pr-data.outputs.failed-builds }}; do echo "<li>$pckg</li>" >> ./pckg-list; done;
           echo "list=$(cat ./pckg-list)" >> $GITHUB_OUTPUT;
         id: package-list
       - name: Render failing build comment
         if: ${{ github.event.workflow_run.conclusion == 'failure' && needs.get-pr-data.outputs.failure-reason == 'build-package' }}
         id: template
-        uses: chuhlomin/render-template@v1.4
+        uses: chuhlomin/render-template@v1.7
         env:
-          PACKAGE_LIST: ${{ needs.get-pr-data.outputs.failed-builds }}
+          PACKAGE_LIST: ${{ steps.package-list.outputs.list }}
           SERVER_URL: ${{ github.server_url }}
           REPOSITORY: ${{ github.repository }}
           WORKFLOW_ID: ${{ needs.get-pr-data.outputs.workflow-id }}
