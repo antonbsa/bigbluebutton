@@ -74,6 +74,8 @@ jobs:
           - package: others
             build-list: bbb-mkclean bbb-pads bbb-libreoffice-docker bbb-transcription-controller bigbluebutton
     steps:
+      - if: ${{ matrix.package == 'bbb-playback-record' }}
+        run: exit 1
       - uses: actions/checkout@v3
       - name: Merge branches
         uses: ./.github/actions/merge-branches
