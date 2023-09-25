@@ -377,13 +377,13 @@ jobs:
         run: |
           # "failure-reason" file is created for build and installation failure only
           if [ -f "./pr-comment-data/failure-reason" ]; then
-            cat ./pr-comment-data/failure-reason
+            cat ~/pr-comment-data/failure-reason
             echo "isAutomatedTestFailure='false'" >> $GITHUB_OUTPUT
           else
             echo "isAutomatedTestFailure='true'" >> $GITHUB_OUTPUT
           fi
       - if: steps.failure-check.outcome == 'success' && steps.failure-check.outputs.isAutomatedTestFailure != 'true'
-        run: cat ./pr-comment-data/failed-builds
+        run: cat ~/pr-comment-data/failed-builds
       - name: Download all blob reports from GitHub Actions Artifacts
         if: steps.failure-check.outputs.isAutomatedTestFailure == 'true'
         uses: actions/download-artifact@v3
