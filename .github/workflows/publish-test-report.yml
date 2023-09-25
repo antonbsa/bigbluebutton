@@ -94,6 +94,7 @@ jobs:
             server-url: ${{ github.server_url }}
             repository: ${{ github.repository }}
             workflow-id: ${{ needs.get-pr-data.outputs.workflow-id }}
+            |-
       - name: Failing build comment
         if: ${{ github.event.workflow_run.conclusion == 'failure' && needs.get-pr-data.outputs.failure-reason == 'build-package' }}
         uses: peter-evans/create-or-update-comment@v2
