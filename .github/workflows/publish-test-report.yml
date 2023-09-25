@@ -87,14 +87,18 @@ jobs:
         if: ${{ github.event.workflow_run.conclusion == 'failure' && needs.get-pr-data.outputs.failure-reason == 'build-package' }}
         id: template
         uses: chuhlomin/render-template@v1.4
+        env:
+          PACKAGE_LIST: ${{ needs.get-pr-data.outputs.failed-builds }}
+          SERVER_URL: ${{ github.server_url }}
+          REPOSITORY: ${{ github.repository }}
+          WORKFLOW_ID: ${{ needs.get-pr-data.outputs.workflow-id }}
         with:
           template: ./.github/workflows/comment-templates/failed-builds.md
           vars: |
-            packages: ${{ steps.package-list.outputs.list }}
-            server-url: ${{ github.server_url }}
-            repository: ${{ github.repository }}
-            workflow-id: ${{ needs.get-pr-data.outputs.workflow-id }}
-            |-
+            packages: ${{ env.PACKAGE_LIST }}
+            server-url: ${{ env.SERVER_URL }}
+            repository: ${{ env.REPOSITORY }}
+            workflow-id: ${{ env.WORKFLOW_ID }}
       - name: Failing build comment
         if: ${{ github.event.workflow_run.conclusion == 'failure' && needs.get-pr-data.outputs.failure-reason == 'build-package' }}
         uses: peter-evans/create-or-update-comment@v2
