@@ -88,7 +88,7 @@ jobs:
         id: template
         uses: chuhlomin/render-template@v1.7
         with:
-          template: .github/comment-templates/failed-builds.md
+          template: .github/workflows/comment-templates/failed-builds.md
           vars: |
             packages: ${{ steps.package-list.outputs.list }}
             server-url: ${{ github.server_url }}
