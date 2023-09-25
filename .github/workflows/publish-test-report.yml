@@ -81,7 +81,7 @@ jobs:
             <h3><strong>:white_check_mark:</strong> All the CI tests have passed!</h3>
       - run: |
           for pckg in ${{ needs.get-pr-data.outputs.failed-builds }}; do echo -n "- $pckg\n" >> ./pckg-list; done;
-          echo "list=(cat ./pckg-list)"" >> $GITHUB_OUTPUT;
+          echo "list=(cat ./pckg-list)" >> $GITHUB_OUTPUT;
         id: package-list
       - name: Render failing build comment
         if: ${{ github.event.workflow_run.conclusion == 'failure' && needs.get-pr-data.outputs.failure-reason == 'build-package' }}
