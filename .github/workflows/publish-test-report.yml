@@ -98,7 +98,7 @@ jobs:
             packages: ${{ env.PACKAGE_LIST }}
             server-url: ${{ env.SERVER_URL }}
             repository: ${{ env.REPOSITORY }}
-            workflow-id: ${{ env.WORKFLOW_ID }}
+            workflow_id: ${{ env.WORKFLOW_ID }}
       - name: Failing build comment
         if: ${{ github.event.workflow_run.conclusion == 'failure' && needs.get-pr-data.outputs.failure-reason == 'build-package' }}
         uses: peter-evans/create-or-update-comment@v2
