@@ -375,8 +375,9 @@ jobs:
       - if: steps.pr-data-artifact.outcome == 'success'
         id: failure-check
         run: |
+          unzip pr-comment-data
           # "failure-reason" file is created for build and installation failure only
-          if [ -f "./pr-comment-data/failure-reason" ]; then
+          if [ -f "~/pr-comment-data/failure-reason" ]; then
             cat ~/pr-comment-data/failure-reason
             echo "isAutomatedTestFailure='false'" >> $GITHUB_OUTPUT
           else
