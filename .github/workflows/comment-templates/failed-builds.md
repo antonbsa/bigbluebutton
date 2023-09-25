@@ -4,6 +4,7 @@
 <ul>
 {{ .packages }}
 </ul>
+
 ___
 
 [Click here]({{ .server_url }}/{{ .repository }}/actions/runs/{{ .workflow_id }}) to check the action test reports
