@@ -96,7 +96,7 @@ jobs:
           template: ./.github/workflows/comment-templates/failed-builds.md
           vars: |
             packages: ${{ env.PACKAGE_LIST }}
-            server-url: ${{ env.SERVER_URL }}
+            server_url: ${{ env.SERVER_URL }}
             repository: ${{ env.REPOSITORY }}
             workflow_id: ${{ env.WORKFLOW_ID }}
       - name: Failing build comment
