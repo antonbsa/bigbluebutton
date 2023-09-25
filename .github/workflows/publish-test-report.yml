@@ -86,7 +86,7 @@ jobs:
       - name: Render failing build comment
         if: ${{ github.event.workflow_run.conclusion == 'failure' && needs.get-pr-data.outputs.failure-reason == 'build-package' }}
         id: template
-        uses: chuhlomin/render-template@v1.7
+        uses: chuhlomin/render-template@v1.4
         with:
           template: .github/workflows/comment-templates/failed-builds.md
           vars: |
