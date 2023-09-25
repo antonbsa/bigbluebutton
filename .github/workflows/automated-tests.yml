@@ -375,22 +375,22 @@ jobs:
           # "failure-reason" file is created for build and installation failure only
           if [ -f "./pr-comment-data/failure-reason" ]; then
             echo ./pr-comment-data/failure-reason
-            echo "isAutomatedTestFailure=false" >> $GITHUB_OUTPUT
+            echo "isAutomatedTestFailure='false'" >> $GITHUB_OUTPUT
           else
-            echo "isAutomatedTestFailure=true" >> $GITHUB_OUTPUT
+            echo "isAutomatedTestFailure='true'" >> $GITHUB_OUTPUT
           fi
       - name: Download all blob reports from GitHub Actions Artifacts
-        if: ${{ steps.failure-check.outputs.isAutomatedTestFailure }}
+        if: steps.failure-check.outputs.isAutomatedTestFailure == 'true'
         uses: actions/download-artifact@v3
         with:
           name: all-blob-reports
           path: bigbluebutton-tests/playwright/all-blob-reports
       - name: Merge into HTML Report
-        if: ${{ steps.failure-check.outputs.isAutomatedTestFailure }}
+        if: steps.failure-check.outputs.isAutomatedTestFailure == 'true'
         working-directory: ./bigbluebutton-tests/playwright
         run: npx playwright merge-reports --reporter html ./all-blob-reports
       - name: Upload HTML tests report
-        if: ${{ steps.failure-check.outputs.isAutomatedTestFailure }}
+        if: steps.failure-check.outputs.isAutomatedTestFailure == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: tests-report
