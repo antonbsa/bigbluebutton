@@ -89,7 +89,7 @@ jobs:
           REPOSITORY: ${{ github.repository }}
           WORKFLOW_ID: ${{ needs.get-pr-data.outputs.workflow-id }}
         with:
-          template: ./.github/workflows/comment-templates/failed-builds.md
+          template: ./.github/assets/pr-comment/failed-builds.md
           vars: |
             packages: ${{ env.PACKAGE_LIST }}
             server_url: ${{ env.SERVER_URL }}
