@@ -251,7 +251,8 @@ jobs:
           sudo sh -c '
           apt --purge -y remove apache2-bin
           # change some config values to increase tolerance for slow machines
-          touch /etc/bigbluebutton/bbb-html5.yml
+          mkdir -p /etc/bigbluebutton/
+          sudo touch /etc/bigbluebutton/bbb-html5.yml
           sudo yq e -i ".public.stats.rtt[0] = 1000" /etc/bigbluebutton/bbb-html5.yml
           sudo yq e -i ".public.stats.rtt[1] = 2000" /etc/bigbluebutton/bbb-html5.yml
           sudo yq e -i ".public.stats.rtt[2] = 4000" /etc/bigbluebutton/bbb-html5.yml
