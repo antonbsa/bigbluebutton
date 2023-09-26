@@ -14,7 +14,7 @@ jobs:
       pr-number: ${{ steps.set-env.outputs.pr-number }}
       workflow-id: ${{ steps.set-env.outputs.workflow-id }}
       failure-reason: ${{ steps.set-env.outputs.failure-reason || '' }}
-      failed-builds: ${{ steps.set-env.outputs.failed-builds || ''}}
+      failed-packages-list: ${{ steps.set-env.outputs.failed-packages-list || ''}}
     steps:
       # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#using-data-from-the-triggering-workflow
       - name: Download artifact
@@ -46,7 +46,7 @@ jobs:
           echo "pr-number=$(cat ./pr_number)" >> $GITHUB_OUTPUT
           echo "workflow-id=$(cat ./workflow_id)" >> $GITHUB_OUTPUT
           echo "failure-reason=$(cat ./failure-reason)" >> $GITHUB_OUTPUT
-          echo "failed-builds=$(cat ./failed-builds)" >> $GITHUB_OUTPUT
+          echo "failed-packages-list=$(cat ./failed-builds/failed-packages)" >> $GITHUB_OUTPUT
   comment-pr:
     runs-on: ubuntu-latest
     permissions:
@@ -79,16 +79,12 @@ jobs:
           body: |
             <h1>Automated tests Summary</h1>
             <h3><strong>:white_check_mark:</strong> All the CI tests have passed!</h3>
-      - run: |
-          for pckg in ${{ needs.get-pr-data.outputs.failed-builds }}; do echo "<li>$pckg</li>" >> ./pckg-list; done;
-          echo "list=$(cat ./pckg-list)" >> $GITHUB_OUTPUT;
-        id: package-list
       - name: Render failing build comment
         if: ${{ github.event.workflow_run.conclusion == 'failure' && needs.get-pr-data.outputs.failure-reason == 'build-package' }}
         id: template
         uses: chuhlomin/render-template@v1.7
         env:
-          PACKAGE_LIST: ${{ steps.package-list.outputs.list }}
+          PACKAGE_LIST: ${{ needs.get-pr-data.outputs.failed-packages-list }}
           SERVER_URL: ${{ github.server_url }}
           REPOSITORY: ${{ github.repository }}
           WORKFLOW_ID: ${{ needs.get-pr-data.outputs.workflow-id }}
