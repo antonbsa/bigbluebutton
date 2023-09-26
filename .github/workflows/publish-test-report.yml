@@ -43,10 +43,14 @@ jobs:
       - name: Set env variables
         id: set-env
         run: |
+          ls
+          cat ./failed-builds/failed-packages
+          echo "==="
           echo "pr-number=$(cat ./pr_number)" >> $GITHUB_OUTPUT
           echo "workflow-id=$(cat ./workflow_id)" >> $GITHUB_OUTPUT
           echo "failure-reason=$(cat ./failure-reason)" >> $GITHUB_OUTPUT
-          echo "failed-packages-list=$(cat ./failed-builds/failed-packages)" >> $GITHUB_OUTPUT
+          failed-package-list="$(cat ./failed-builds/failed-packages)"
+          echo "failed-packages-list=$failed-package-list" >> $GITHUB_OUTPUT
   comment-pr:
     runs-on: ubuntu-latest
     permissions:
