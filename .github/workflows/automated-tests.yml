@@ -375,6 +375,11 @@ jobs:
       - if: steps.pr-data-artifact.outcome == 'success'
         id: failure-check
         run: |
+          echo "opa"
+          pwd
+          echo "opa 2"
+          ls -R
+          echo "opa 3"
           unzip pr-comment-data
           # "failure-reason" file is created for build and installation failure only
           if [ -f "./pr-comment-data/failure-reason" ]; then
