@@ -376,11 +376,6 @@ jobs:
       - if: steps.pr-data-artifact.outcome == 'success'
         id: failure-check
         run: |
-          echo "opa"
-          pwd
-          echo "opa 2"
-          ls
-          echo "opa 3"
           # "failure-reason" file is created for build and installation failure only
           if [ -f "./pr-comment-data/failure-reason" ]; then
             cat ./pr-comment-data/failure-reason
@@ -390,7 +385,7 @@ jobs:
           fi
       - if: steps.failure-check.outcome == 'success' && steps.failure-check.outputs.isAutomatedTestFailure != 'true'
         # for loop here later
-        run: ls ./pr-comment-data/failed-builds
+        run:
       - name: Download all blob reports from GitHub Actions Artifacts
         if: steps.failure-check.outputs.isAutomatedTestFailure == 'true'
         uses: actions/download-artifact@v3
