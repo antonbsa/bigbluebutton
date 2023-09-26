@@ -384,8 +384,8 @@ jobs:
             echo "isAutomatedTestFailure='true'" >> $GITHUB_OUTPUT
           fi
       - if: steps.failure-check.outcome == 'success' && steps.failure-check.outputs.isAutomatedTestFailure != 'true'
-        # for loop here later
-        run:
+        working-directory: pr-comment-data/failed-builds
+        run: for pckg in *; do echo "<li>$pckg</li>" >> ./failed-packages; done;
       - name: Download all blob reports from GitHub Actions Artifacts
         if: steps.failure-check.outputs.isAutomatedTestFailure == 'true'
         uses: actions/download-artifact@v3
@@ -411,7 +411,6 @@ jobs:
           mkdir -p ./pr-comment-data
           echo ${{ github.event.number }} > ./pr-comment-data/pr_number
           echo ${{ github.run_id }} > ./pr-comment-data/workflow_id
-          ls ./pr-comment-data/failed-builds
       - name: Upload PR data for auto-comment
         if: always() && github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
