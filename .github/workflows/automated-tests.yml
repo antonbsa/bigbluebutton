@@ -414,6 +414,7 @@ jobs:
           mkdir -p ./pr-comment-data
           echo ${{ github.event.number }} > ./pr-comment-data/pr_number
           echo ${{ github.run_id }} > ./pr-comment-data/workflow_id
+          echo "content" > ./pr-comment-data/test
           pwd
           ls -R
       - name: Upload PR data for auto-comment
