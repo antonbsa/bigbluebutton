@@ -74,6 +74,8 @@ jobs:
           - package: others
             build-list: bbb-mkclean bbb-pads bbb-libreoffice-docker bbb-transcription-controller bigbluebutton
     steps:
+      - if: ${{ matrix.package == 'bbb-playback-record' }}
+        run: exit 1
       - uses: actions/checkout@v3
       - name: Merge branches
         uses: ./.github/actions/merge-branches
@@ -103,6 +105,18 @@ jobs:
         with:
           name: artifacts_${{ matrix.package }}.tar
           path: artifacts.tar
+      - if: failure()
+        working-directory: ./
+        run: |
+          mkdir -p ./pr-comment-data
+          echo "build-package" > ./pr-comment-data/failure-reason
+          mkdir -p ./pr-comment-data/failed-builds
+          touch ./pr-comment-data/failed-builds/${{ matrix.package }}
+      - if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: pr-comment-data
+          path: pr-comment-data
   install-and-run-tests:
     needs: build-package
     runs-on: ubuntu-22.04
@@ -261,6 +275,11 @@ jobs:
           sed -i "s/\"minify\": true,/\"minify\": false,/" /usr/share/etherpad-lite/settings.json
           bbb-conf --restart
           EOF
+      - if: failure()
+        working-directory: ./
+        run: |
+          mkdir -p ./pr-comment-data
+          echo "bbb-installation" > ./pr-comment-data/failure-reason
       - name: Install test dependencies
         working-directory: ./bigbluebutton-tests/playwright
         run: |
@@ -269,7 +288,8 @@ jobs:
           npx playwright install-deps
           npx playwright install
           '
-      - name: Run tests
+      - name: Run Chromium tests
+        id: chromium-tests
         working-directory: ./bigbluebutton-tests/playwright
         env:
           NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt
@@ -278,6 +298,7 @@ jobs:
           BBB_SECRET: bbbci
         run: npm run test-chromium-ci -- --shard ${{ matrix.shard }}
       - name: Run Firefox tests
+        id: firefox-tests
         working-directory: ./bigbluebutton-tests/playwright
         if: |
           contains(github.event.pull_request.labels.*.name, 'test Firefox') ||
@@ -293,7 +314,7 @@ jobs:
           find $HOME/.cache/ms-playwright -name libnssckbi.so -exec rm {} \; -exec ln -s /usr/lib/x86_64-linux-gnu/pkcs11/p11-kit-trust.so {} \;
           npm run test-firefox-ci -- --shard ${{ matrix.shard }}
           '
-      - if: always() && github.event_name == 'pull_request'
+      - if: always() && github.event_name == 'pull_request' && (steps.chromium-tests.conclusion != 'skipped' || steps.firefox-tests.conclusion != 'skipped')
         name: Upload blob report to GitHub Actions Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -346,15 +367,40 @@ jobs:
       - name: Install dependencies
         working-directory: ./bigbluebutton-tests/playwright
         run: npm ci
+      - if: needs.install-and-run-tests.result == 'skipped' || needs.install-and-run-tests.result == 'failure'
+        id: pr-data-artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: pr-comment-data
+          path: pr-comment-data
+      - if: steps.pr-data-artifact.outcome == 'success'
+        id: failure-check
+        run: |
+          # "failure-reason" file is created for build and installation failure only
+          if [ -f "./pr-comment-data/failure-reason" ]; then
+            cat ./pr-comment-data/failure-reason
+            echo "isAutomatedTestFailure='false'" >> $GITHUB_OUTPUT
+          else
+            echo "isAutomatedTestFailure='true'" >> $GITHUB_OUTPUT
+          fi
+      - if: steps.failure-check.outcome == 'success' && steps.failure-check.outputs.isAutomatedTestFailure != 'true'
+        working-directory: pr-comment-data/failed-builds
+        run: |
+          for pckg in *; do echo -e "<li>$pckg</li>" >> ./failed-packages; done;
+          pwd
+          ls
       - name: Download all blob reports from GitHub Actions Artifacts
+        if: steps.failure-check.outputs.isAutomatedTestFailure == 'true'
         uses: actions/download-artifact@v3
         with:
           name: all-blob-reports
           path: bigbluebutton-tests/playwright/all-blob-reports
       - name: Merge into HTML Report
+        if: steps.failure-check.outputs.isAutomatedTestFailure == 'true'
         working-directory: ./bigbluebutton-tests/playwright
         run: npx playwright merge-reports --reporter html ./all-blob-reports
       - name: Upload HTML tests report
+        if: steps.failure-check.outputs.isAutomatedTestFailure == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: tests-report
@@ -362,14 +408,19 @@ jobs:
             bigbluebutton-tests/playwright/playwright-report
             bigbluebutton-tests/playwright/test-results
       - name: Write PR data for auto-comment
-        if: github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request'
         working-directory: ./
         run: |
           mkdir -p ./pr-comment-data
           echo ${{ github.event.number }} > ./pr-comment-data/pr_number
           echo ${{ github.run_id }} > ./pr-comment-data/workflow_id
+          echo "content" > ./pr-comment-data/test
+          pwd
+          ls -R
+          echo "=="
+          ls ./pr-comment-data
       - name: Upload PR data for auto-comment
-        if: github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
           name: pr-comment-data
