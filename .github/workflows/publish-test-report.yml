@@ -46,9 +46,13 @@ jobs:
           ls -R
           echo "==="
           echo "pr-number=$(cat ./pr_number)" >> $GITHUB_OUTPUT
+          echo "1"
           echo "workflow-id=$(cat ./workflow_id)" >> $GITHUB_OUTPUT
+          echo "2"
           echo "failure-reason=$(cat ./failure-reason)" >> $GITHUB_OUTPUT
+          echo "3"
           failed-package-list="$(cat ./failed-builds/failed-packages)"
+          echo "4"
           echo "failed-packages-list=$failed-package-list" >> $GITHUB_OUTPUT
   comment-pr:
     runs-on: ubuntu-latest
