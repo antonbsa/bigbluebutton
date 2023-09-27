@@ -417,6 +417,8 @@ jobs:
           echo "content" > ./pr-comment-data/test
           pwd
           ls -R
+          echo "=="
+          ls ./pr-comment-data
       - name: Upload PR data for auto-comment
         if: always() && github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
