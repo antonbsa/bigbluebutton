@@ -386,7 +386,7 @@ jobs:
       - if: steps.failure-check.outcome == 'success' && steps.failure-check.outputs.isAutomatedTestFailure != 'true'
         working-directory: pr-comment-data/failed-builds
         run: |
-          for pckg in *; do echo "<li>$pckg</li>" >> ./failed-packages; done;
+          for pckg in *; do echo -e "<li>$pckg</li>" >> ./failed-packages; done;
           pwd
           ls
       - name: Download all blob reports from GitHub Actions Artifacts
