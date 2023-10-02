@@ -177,31 +177,31 @@ export default injectIntl(withTracker(({ intl }) => {
     if (currentBreakout) {
       data.message = (
         <MeetingRemainingTime
-          breakoutRoom={currentBreakout}
+          timeRemaining={currentBreakout.timeRemaining}
           messageDuration={intlMessages.breakoutTimeRemaining}
           timeEndedMessage={intlMessages.breakoutWillClose}
-          displayAlerts={true}
+          displayAlerts
         />
       );
     }
   }
 
-  const meetingTimeRemaining = MeetingTimeRemaining.findOne({ meetingId });
+  const meetingWithTimeRemaining = MeetingTimeRemaining.findOne({ meetingId });
   const Meeting = Meetings.findOne({ meetingId },
     { fields: { 'meetingProp.isBreakout': 1 } });
 
-  if (meetingTimeRemaining && Meeting) {
-    const { timeRemaining } = meetingTimeRemaining;
+  if (meetingWithTimeRemaining && Meeting) {
+    const { timeRemaining } = meetingWithTimeRemaining;
     const { isBreakout } = Meeting.meetingProp;
     const underThirtyMin = timeRemaining && timeRemaining <= (REMAINING_TIME_THRESHOLD * 60);
 
     if (underThirtyMin && !isBreakout) {
       data.message = (
         <MeetingRemainingTime
-          breakoutRoom={meetingTimeRemaining}
+          timeRemaining={meetingWithTimeRemaining.timeRemaining}
           messageDuration={intlMessages.meetingTimeRemaining}
           timeEndedMessage={intlMessages.meetingWillClose}
-          displayAlerts={true}
+          displayAlerts
         />
       );
     }

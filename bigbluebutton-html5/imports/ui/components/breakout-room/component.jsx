@@ -497,8 +497,9 @@ class BreakoutRoom extends PureComponent {
       >
         <Styled.Duration>
           <MeetingRemainingTime
+            timeRemaining={breakoutRooms[0].timeRemaining}
             messageDuration={intlMessages.breakoutDuration}
-            breakoutRoom={breakoutRooms[0]}
+            isBreakoutDuration
             fromBreakoutPanel
           />
         </Styled.Duration>

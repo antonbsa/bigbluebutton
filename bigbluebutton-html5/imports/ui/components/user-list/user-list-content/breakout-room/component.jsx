@@ -67,8 +67,8 @@ const BreakoutRoomItem = ({
                 </Styled.BreakoutTitle>
                 <Styled.BreakoutDuration>
                   <MeetingRemainingTime
+                    timeRemaining={breakoutRoom.timeRemaining}
                     messageDuration={intlMessages.breakoutTimeRemaining}
-                    breakoutRoom={breakoutRoom}
                   />
                 </Styled.BreakoutDuration>
               </div>
@@ -88,4 +88,7 @@ BreakoutRoomItem.propTypes = {
     formatMessage: PropTypes.func.isRequired,
   }).isRequired,
   hasBreakoutRoom: PropTypes.bool.isRequired,
+  breakoutRoom: PropTypes.shape({
+    timeRemaining: PropTypes.number.isRequired,
+  }).isRequired,
 };
