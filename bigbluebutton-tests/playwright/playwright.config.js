@@ -8,7 +8,7 @@ const config = {
   workers: CI ? 1 : 2,
   timeout: 3 * 60 * 1000,
   reporter: CI
-    ? [['blob'], ['github']]
+    ? [['blob'], ['dot']]
     : [['list'], ['html', { open: 'never' }],
   ],
   forbidOnly: CI,
