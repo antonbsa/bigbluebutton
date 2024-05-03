@@ -4,11 +4,16 @@ class CustomReporter {
     const { status, error, retry } = result;
     const titlePath = test.titlePath();
     titlePath.shift();
-    const logTitle = `[${titlePath.shift()}] > ${titlePath.join(' > ')}`;
+    const logTitle = `[${titlePath.shift()}] › ${titlePath.join(' › ')}`.replace('@ci', '').trim();
 
     if (status === 'failed') {
-      if (retries > 0 && retries != retry) return;
-      console.log(`::error title=${logTitle}::  ${logTitle}\n${error.stack}`.replace(/\n/g, '%0A'));
+      let logType = 'error';
+      const message = (retry > 0)
+        ? `Retry #${retry} ───────────────────────────────────────────────────────────────────────────────────────\n${logTitle}\n${error.stack}`
+        : `${logTitle}\n${error.stack}`;
+
+      if (retries != retry) logType = 'warning';
+      console.log(`::${logType} title=${logTitle}::  ${message}`.replace(/\n/g, '%0A  '));
     }
   }
 }
