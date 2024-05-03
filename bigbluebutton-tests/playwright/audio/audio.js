@@ -24,7 +24,7 @@ class Audio extends MultiUsers {
     await this.modPage.hasElement(e.leaveAudio);
     await this.modPage.waitAndClick(e.leaveAudio);
     // force failure
-    await expect(1).toBe(2);
+    await this.modPage.hasElement(e.leaveAudio);
   }
 
   async joinMicrophone() {

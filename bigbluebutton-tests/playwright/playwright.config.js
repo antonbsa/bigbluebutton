@@ -8,7 +8,7 @@ const config = {
   workers: CI ? 1 : 2,
   timeout: 3 * 60 * 1000,
   reporter: CI
-    ? [['blob'], ['dot']]
+    ? [['blob'], ['./custom-reporter.js']]
     : [['list'], ['html', { open: 'never' }],
   ],
   forbidOnly: CI,
