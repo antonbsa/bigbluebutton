@@ -1,5 +1,6 @@
 class CustomReporter {
   onTestEnd(test, result) {
+    const { retries } = test;
     const { status, error, retry } = result;
     const titlePath = test.titlePath();
     titlePath.shift();
@@ -7,7 +8,7 @@ class CustomReporter {
 
     if (status === 'failed') {
       if (retries > 0 && retries != retry) return;
-      console.log(`::error title=${logTitle}::  ${logTitle}\n${error.stack}`);
+      console.log(`::error title=${logTitle}::  ${logTitle}\n${error.stack}`.replace(/\n/g, '%0A'));
     }
   }
 }
