@@ -7,13 +7,15 @@ class CustomReporter {
     const logTitle = `[${titlePath.shift()}] › ${titlePath.join(' › ')}`.replace('@ci', '').trim();
 
     if (status === 'failed') {
-      let logType = 'error';
-      const message = (retry > 0)
-        ? `Retry #${retry} ───────────────────────────────────────────────────────────────────────────────────────\n${logTitle}\n${error.stack}`
-        : `${logTitle}\n${error.stack}`;
+      const baseMessage = `${logTitle}\n${error.stack}`;
 
-      if (retries != retry) logType = 'warning';
-      console.log(`::${logType} title=${logTitle}::  ${message}`.replace(/\n/g, '%0A  '));
+      if (retries != retry) {
+        const warningMessage = `Flaky (attempt #${retry + 1}) ────────────────────────────────────────────────────────────\n${baseMessage}\n`;
+        console.log(`::warning title=${logTitle}::  ${warningMessage}`.replace(/\n/g, '%0A  '));
+        return;
+      }
+
+      console.log(`::error title=${logTitle}::  ${baseMessage}`.replace(/\n/g, '%0A  '));
     }
   }
 }
