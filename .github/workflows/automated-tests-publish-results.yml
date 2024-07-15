@@ -7,7 +7,7 @@ on:
       - completed
       - requested
 env:
-  isCompleted: ${{ github.event.workflow_run.event == 'completed' }}
+  isCompleted: ${{ github.event.workflow_run.status == 'completed' }}
 
 jobs:
   get-pr-data:
