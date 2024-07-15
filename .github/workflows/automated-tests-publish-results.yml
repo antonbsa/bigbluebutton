@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Find associated pull request
         id: pr
-        uses: ions/github-script@v7
+        uses: actions/github-script@v7
         with:
           script: |
             const response = await github.rest.search.issuesAndPullRequests({
@@ -49,7 +49,7 @@ jobs:
           body-includes: Automated tests Summary
       - name: Remove previous comment
         if: steps.fc.outputs.comment-id != ''
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             github.rest.issues.deleteComment({
