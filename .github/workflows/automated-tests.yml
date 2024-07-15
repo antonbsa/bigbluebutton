@@ -373,6 +373,7 @@ jobs:
         working-directory: ./bigbluebutton-tests/playwright
         run: npm ci
       - name: Merge artifacts
+        if: ${{ env.hasReportData }}
         uses: actions/upload-artifact/merge@v4
         with:
           name: all-blob-reports
