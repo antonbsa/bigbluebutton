@@ -5,7 +5,7 @@ on:
       - Automated tests
     types:
       - completed
-      - in_progress
+      - requested
 env:
   isCompleted: ${{ github.event.workflow_run.event == 'completed' }}
 
