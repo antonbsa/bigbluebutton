@@ -41,7 +41,7 @@ jobs:
     needs: get-pr-data
     steps:
       - name: Find Comment
-        uses: peter-evans/find-comment@v2
+        uses: peter-evans/find-comment@v3
         id: fc
         with:
           issue-number: ${{ needs.get-pr-data.outputs.pr-number }}
@@ -59,7 +59,7 @@ jobs:
             })
       - name: In progress tests comment
         if: ${{ !fromJson(env.isCompleted) }}
-        uses: peter-evans/create-or-update-comment@v2
+        uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ needs.get-pr-data.outputs.pr-number }}
           body: |
@@ -67,7 +67,7 @@ jobs:
             <h3><strong>:construction:</strong> Tests are running...</h3>
       - name: Passing tests comment
         if: ${{ github.event.workflow_run.conclusion == 'success' }}
-        uses: peter-evans/create-or-update-comment@v2
+        uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ needs.get-pr-data.outputs.pr-number }}
           body: |
@@ -75,7 +75,7 @@ jobs:
             <h3><strong>:white_check_mark:</strong> All the CI tests have passed!</h3>
       - name: Failing tests comment
         if: ${{ github.event.workflow_run.conclusion != 'success' }}
-        uses: peter-evans/create-or-update-comment@v2
+        uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ needs.get-pr-data.outputs.pr-number }}
           body: |
