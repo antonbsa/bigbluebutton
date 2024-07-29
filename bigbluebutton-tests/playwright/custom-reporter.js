@@ -16,6 +16,7 @@ class CustomReporter {
       }
 
       console.log(`::error title=${logTitle}::  ${baseMessage}`.replace(/\n/g, '%0A  '));
+      console.log('just a simple test')
     }
   }
 }
