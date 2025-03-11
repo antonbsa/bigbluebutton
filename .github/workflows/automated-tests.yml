@@ -290,6 +290,15 @@ jobs:
           </include>
           EOF
           '
+      - name: Install Source Sans Pro font
+        run: |
+          sudo -i <<EOF
+          mkdir -p /tmp/source-sans-pro
+          cd /tmp/source-sans-pro
+          wget https://github.com/adobe-fonts/source-sans-pro/archive/2.020R-ro/1.075R-it.zip
+          unzip 1.075R-it.zip
+          sudo cp source-sans-2.020R-ro-1.075R-it/OTF/*.otf /usr/local/share/fonts/
+          fc-cache -f -v
       - name: Install BBB
         env:
           NODE_EXTRA_CA_CERTS: /usr/local/share/ca-certificates/bbb-dev/bbb-dev-ca.crt
