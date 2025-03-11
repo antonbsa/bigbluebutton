@@ -7,10 +7,15 @@ const chromiumConfig = {
     launchOptions: {
       args: [
         '--no-sandbox',
+        '--disable-gpu',
         '--ignore-certificate-errors',
         '--use-fake-ui-for-media-stream',
-        '--use-fake-device-for-media-stream',
         '--allow-file-access-from-files',
+        '--use-fake-device-for-media-stream',
+        '--font-render-hinting=none',
+        '--disable-skia-runtime-opts',
+        '--disable-font-subpixel-positioning',
+        '--disable-lcd-text',
         `--use-file-for-fake-video-capture=${path.join(__dirname, 'media/video.y4m')}`
       ],
     },

@@ -12,6 +12,11 @@ class ShapeTools extends MultiUsers {
   }
 
   async pan() {
+    await this.modPage.page.waitForFunction(() => document.fonts.ready);
+    await this.modPage.page.waitForFunction(([selector, fontName]) => {
+      const el = document.querySelector(selector);
+      return getComputedStyle(el).fontFamily.includes(fontName);
+    }, [e.chatNotificationMessageText, 'Source Sans Pro']);
     await this.modPage.waitForSelector(e.whiteboard, ELEMENT_WAIT_LONGER_TIME);
     await this.userPage.waitForSelector(e.whiteboard);
     await this.modPage.waitForSelector(e.resetZoomButton);
