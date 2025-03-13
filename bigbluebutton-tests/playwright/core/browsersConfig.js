@@ -15,6 +15,7 @@ const chromiumConfig = {
         '--font-render-hinting=none',
         '--disable-skia-runtime-opts',
         '--disable-font-subpixel-positioning',
+        // '--disable-remote-fonts',
         '--disable-lcd-text',
         `--use-file-for-fake-video-capture=${path.join(__dirname, 'media/video.y4m')}`
       ],

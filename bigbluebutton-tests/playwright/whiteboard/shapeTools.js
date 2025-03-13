@@ -17,6 +17,17 @@ class ShapeTools extends MultiUsers {
       const el = document.querySelector(selector);
       return getComputedStyle(el).fontFamily.includes(fontName);
     }, [e.chatNotificationMessageText, 'Source Sans Pro']);
+    const renderedFont = await this.modPage.page.evaluate(() => {
+      const element = document.querySelector('body'); // Change selector as needed
+      const fontFamilies = window.getComputedStyle(element).fontFamily.split(',').map(f => f.trim().replace(/['"]/g, ''));
+      for (const font of fontFamilies) {
+          if (document.fonts.check(`12px ${font}`)) {
+              return font;
+          }
+      }
+      return 'Default system font';
+    });
+    console.log({ renderedFont });
     await this.modPage.waitForSelector(e.whiteboard, ELEMENT_WAIT_LONGER_TIME);
     await this.userPage.waitForSelector(e.whiteboard);
     await this.modPage.waitForSelector(e.resetZoomButton);
