@@ -29,6 +29,12 @@ class ShapeTools extends MultiUsers {
     });
     console.log({ renderedFont });
     await this.modPage.waitForSelector(e.whiteboard, ELEMENT_WAIT_LONGER_TIME);
+    await this.modPage.page.addStyleTag({
+      content: `
+        body {
+          font-family: 'Liberation Sans', Arial, sans-serif !important;
+        }`,
+    });
     await this.userPage.waitForSelector(e.whiteboard);
     await this.modPage.waitForSelector(e.resetZoomButton);
     await this.modPage.setHeightWidthViewPortSize();
