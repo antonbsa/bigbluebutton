@@ -63,7 +63,12 @@ function createMeetingUrl(params, createParameter, customMeetingId) {
 
 function createMeetingPromise(params, createParameter, customMeetingId) {
   const url = createMeetingUrl(params, createParameter, customMeetingId);
-  return axios.get(url, { adapter: 'http' });
+  return axios.get(url, {
+    adapter: 'http',
+    headers: {
+      "Accept": "application/xml, text/xml"
+    }
+  });
 }
 
 async function createMeeting(params, createParameter, customMeetingId) {
