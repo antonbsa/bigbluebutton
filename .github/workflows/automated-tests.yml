@@ -123,6 +123,8 @@ jobs:
         uses: ./.github/actions/install-bbb
       - name: Check BBB services status
         run: sudo bbb-conf --status
+      - name: Check BBB web service status
+        run: sudo systemctl status bbb-web --no-pager
       - name: Install test dependencies
         working-directory: ./bigbluebutton-tests/playwright
         timeout-minutes: 25
