@@ -121,6 +121,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install BBB
         uses: ./.github/actions/install-bbb
+      - name: Check BBB services status
+        run: sudo bbb-conf --status
       - name: Install test dependencies
         working-directory: ./bigbluebutton-tests/playwright
         timeout-minutes: 25
