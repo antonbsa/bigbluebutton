@@ -73,10 +73,21 @@ function createMeetingPromise(params, createParameter, customMeetingId) {
 
 async function createMeeting(params, createParameter, customMeetingId) {
   const promise = createMeetingPromise(params, createParameter, customMeetingId);
-  const response = await promise;
-  expect(response.status).toEqual(200);
-  const xmlResponse = await xml2js.parseStringPromise(response.data);
-  return xmlResponse.response.meetingID[0];
+  try {
+    const response = await promise;
+    expect(response.status).toEqual(200);
+    const xmlResponse = await xml2js.parseStringPromise(response.data);
+    return xmlResponse.response.meetingID[0];
+  } catch (error) {
+    console.error(`Error creating meeting: ${error.message}`);
+    if (error.response) {
+      console.error(`Response status: ${error.response.status}`);
+      console.error(`Response data: ${error.response.data}`);
+    } else if (error.request) {
+      console.error(`Request made but no response received: ${error.request}`);
+    }
+    throw error;
+  }
 }
 
 function getJoinURL(meetingID, params, moderator, joinParameter, skipSessionDetailsModal) {
