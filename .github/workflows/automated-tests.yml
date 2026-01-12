@@ -326,13 +326,21 @@ jobs:
           find $HOME/.cache/ms-playwright -name libnssckbi.so -exec rm {} \; -exec ln -s /usr/lib/x86_64-linux-gnu/pkcs11/p11-kit-trust.so {} \;
           npm run test-firefox-ci -- --shard=${{ env.shard }}
       - if: always()
+        name: Set blob report artifact name
+        run: |
+          if [ "${{ job.status }}" = "failure" ]; then
+            echo "BLOB_REPORT_NAME=blob-report-failed-${{ matrix.shard }}" >> "$GITHUB_ENV"
+          else
+            echo "BLOB_REPORT_NAME=blob-report-${{ matrix.shard }}" >> "$GITHUB_ENV"
+          fi
+      - if: always()
         name: Upload blob report to GitHub Actions Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: blob-report-${{ matrix.shard }}
+          name: ${{ env.BLOB_REPORT_NAME }}
           path: bigbluebutton-tests/playwright/blob-report
           if-no-files-found: ignore
-      - if: always()
+      - if: failure()
         name: Generate the shard HTML report from blob report
         shell: bash
         working-directory: ./bigbluebutton-tests/playwright
@@ -342,7 +350,7 @@ jobs:
           else
             echo "blob-report directory not found, skipping HTML report generation"
           fi
-      - if: always()
+      - if: failure()
         name: Upload shard HTML report to GitHub Actions Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -535,12 +543,20 @@ jobs:
           BBB_SECRET: bbbci
         run: npm run test-chromium-ci -- --grep-invert "$SDK_FLAKY_TESTS"
       - if: always()
+        name: Set blob report artifact name
+        run: |
+          if [ "${{ job.status }}" = "failure" ]; then
+            echo "BLOB_REPORT_NAME=blob-report-failed-plugins" >> "$GITHUB_ENV"
+          else
+            echo "BLOB_REPORT_NAME=blob-report-plugins" >> "$GITHUB_ENV"
+          fi
+      - if: always()
         name: Upload blob report to GitHub Actions Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: blob-report-plugins
+          name: ${{ env.BLOB_REPORT_NAME }}
           path: bigbluebutton-tests/bigbluebutton-html-plugin-sdk/blob-report
-      - if: always()
+      - if: failure()
         name: Generate the plugins HTML report from blob report
         shell: bash
         working-directory: ./bigbluebutton-tests/bigbluebutton-html-plugin-sdk
@@ -550,7 +566,7 @@ jobs:
           else
             echo "blob-report directory not found, skipping HTML report generation"
           fi
-      - if: always()
+      - if: failure()
         name: Upload shard HTML report to GitHub Actions Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -578,7 +594,7 @@ jobs:
         with:
           name: bbb-logs-plugins
           path: ./bbb-logs.tar.gz
-  upload-report:
+  publish-report:
     if: always() && !contains(github.event.head_commit.message, 'Merge pull request')
     needs:
       - install-and-run-bbb-tests
@@ -587,20 +603,13 @@ jobs:
     env:
       hasReportData: ${{ needs.install-and-run-bbb-tests.result == 'success' || needs.install-and-run-bbb-tests.result == 'failure' && needs.install-and-run-plugin-tests.result == 'success' || needs.install-and-run-plugin-tests.result == 'failure' }}
     steps:
-      # temporarily disabled as merged blob reports are not being used
-      # - name: Merge and upload the blob reports
-      # if: ${{ env.hasReportData }}
-      #   uses: ./.github/actions/merge-and-upload-blob-reports
-      # - name: Remove unnecessary artifact
-      #   uses: geekyeggo/delete-artifact@v5
-      #   with:
-      #     name: all-blob-reports
-      #     failOnError: false
-      - name: Remove unnecessary blob artifacts
-        uses: geekyeggo/delete-artifact@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          name: blob-report-*
-          failOnError: false
+          node-version: 22
+      - name: Merge and upload the blob reports
+        if: ${{ env.hasReportData }}
+        uses: ./.github/actions/merge-and-upload-blob-reports
       - name: Write PR data for auto-comment
         if: github.event_name == 'pull_request'
         working-directory: ./

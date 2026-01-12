@@ -8,6 +8,7 @@ import { checkLastMessageSent, openPrivateChat, openPublicChat } from './util';
 
 export class Chat extends MultiUsers {
   async sendPublicMessage() {
+    expect(1).toBe(2);
     await openPublicChat(this.modPage);
     await this.modPage.hasElementCount(e.chatUserMessageText, 0, 'should have none message on the public chat');
 
