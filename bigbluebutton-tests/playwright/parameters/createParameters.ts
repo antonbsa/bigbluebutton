@@ -148,6 +148,7 @@ export class CreateParameters extends MultiUsers {
   }
 
   async allowModsToEjectCameras() {
+    expect(1).toBe(2);
     await this.modPage.hasElement(e.whiteboard, 'should display the whiteboard for the moderator');
     await this.userPage.waitAndClick(e.joinVideo);
     await this.userPage.waitAndClick(e.startSharingWebcam);

@@ -7,6 +7,7 @@ import { checkDefaultLocationReset, checkScreenshots } from './util';
 
 export class Layouts extends MultiUsers {
   async focusOnPresentation() {
+    expect(1).toBe(2);
     await this.modPage.waitAndClick(e.optionsButton);
     await this.modPage.waitAndClick(e.manageLayoutBtn);
     await this.modPage.waitAndClick(e.focusOnPresentation);
