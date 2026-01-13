@@ -47,9 +47,9 @@ jobs:
                  repo: context.repo.repo,
                  run_id: context.payload.workflow_run.id,
               });
-              let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
+              let matchArtifact = allArtifacts.data.artifacts.find((artifact) => {
                 return artifact.name == "pr-comment-data"
-              })[0];
+              });
               if (!matchArtifact) {
                 console.log('No artifact found');
                 return;
@@ -104,8 +104,11 @@ jobs:
             const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              run_id: ${{ needs.get-pr-data.outputs.workflow-id }},
+              run_id: context.payload.workflow_run.id,
             });
+            console.log({
+              artifacts,
+            })
             const report = artifacts.data.artifacts.find((artifact) => {
               return artifact.name == "tests-report";
             });
